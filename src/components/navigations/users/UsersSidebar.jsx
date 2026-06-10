@@ -16,7 +16,7 @@ const UsersSidebar = ({ profile }) => {
   // Queries
   const menuQuery = useFetchMenuLinks();
   const sortedMenu = menuQuery?.data?.data?.sort(
-    (a, b) => a.sortOrder - b.sortOrder
+    (a, b) => a.sortOrder - b.sortOrder,
   );
 
   return (
@@ -43,19 +43,19 @@ const UsersSidebar = ({ profile }) => {
             to={
               profile?.role === "USER"
                 ? "/user/dashboard"
-                : profile?.role === "DA"
-                ? "/da/dashboard"
-                : profile?.role === "CH"
-                ? "/ch/dashboard"
-                : profile?.role === "ASAD"
-                ? "/asad/visitors"
-                : profile?.role === "SAD"
-                ? "/sad/register"
-                : ""
+                : profile?.role === "DEPT"
+                  ? "/dept/dashboard"
+                  : profile?.role === "CH"
+                    ? "/ch/dashboard"
+                    : profile?.role === "ASAD"
+                      ? "/asad/visitors"
+                      : profile?.role === "SAD"
+                        ? "/sad/register"
+                        : ""
             }
           >
             <Heading size="md" color="white">
-              Visitor Pass | SAD
+              SRAS | SAD
             </Heading>
           </Link>
         </Box>

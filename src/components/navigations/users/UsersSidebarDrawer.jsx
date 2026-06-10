@@ -22,7 +22,7 @@ const UsersSidebarDrawer = ({ isOpen, onClose }) => {
   // Queries
   const menuQuery = useFetchMenuLinks();
   const sortedMenu = menuQuery?.data?.data?.sort(
-    (a, b) => a.sortOrder - b.sortOrder
+    (a, b) => a.sortOrder - b.sortOrder,
   );
 
   return (
@@ -43,7 +43,7 @@ const UsersSidebarDrawer = ({ isOpen, onClose }) => {
         <DrawerCloseButton />
         <DrawerHeader bg="gray.800">
           <Heading size="md" color="white">
-            Visitor Pass | SAD
+            SRAS | SAD
           </Heading>
         </DrawerHeader>
 

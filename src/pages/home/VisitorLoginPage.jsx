@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import VisitorSignInForm from "../../forms/auth/VisitorSignInForm";
-import frontImg from "../../assets/frontImg22.png";
+import frontImg from "../../assets/front1.png";
 //import inventoryImg from "../../assets/inventoryy.jpg";
 import MdIcon from "../../components/core/MdIcon";
 import { useGetXsrfToken } from "../../hooks/authQueries";

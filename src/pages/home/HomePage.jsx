@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import SignInForm from "../../forms/auth/SignInForm";
-import frontImg from "../../assets/frontImg22.png";
+import frontImg from "../../assets/front3.png";
 //import inventoryImg from "../../assets/inventoryy.jpg";
 import MdIcon from "../../components/core/MdIcon";
 import { useGetXsrfToken } from "../../hooks/authQueries";
@@ -71,11 +71,9 @@ const HomePage = () => {
                     backgroundSize="cover"
                     backgroundPosition="center"
                   >
-                    <Stack spacing={3} color="brand.800">
-                      <Heading size="lg">
-                        Secretariat Room Allotment System
-                      </Heading>
-                      <Text fontSize="2xl">
+                    <Stack spacing={3} color="zinc.900">
+                      <Heading size="lg">Room Allotment System</Heading>
+                      <Text fontSize="xl">
                         <strong>Secretariat Administration Department</strong>{" "}
                         <br />
                         <Text fontSize="xl">

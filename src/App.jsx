@@ -20,6 +20,8 @@ import VisitorsAdminPage from "./pages/asad/VisitorsAdminPage";
 import DashboardPage from "./pages/asad/DashboardPage";
 import DashboardSADPage from "./pages/sad/DashboardSADPage";
 import VisitorLoginPage from "./pages/home/VisitorLoginPage";
+import DeptRoutes from "./components/routes/DeptRoutes";
+import DeptDashboardPage from "./pages/dept/DeptDashboardPage";
 
 const App = () => {
   return (
@@ -54,6 +56,16 @@ const App = () => {
           {/* Dashboard */}
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="visitors" element={<VisitorsAdminPage />} />
+
+          {/* Profile */}
+          <Route path="profile" element={<UserProfilePage />} />
+        </Route>
+
+        {/* DEPTROUTES *******************************************************/}
+        <Route path="/dept" element={<DeptRoutes />}>
+          {/* Dashboard */}
+          <Route path="dashboard" element={<DeptDashboardPage />} />
+          {/* <Route path="visitors" element={<VisitorsAdminPage />} /> */}
 
           {/* Profile */}
           <Route path="profile" element={<UserProfilePage />} />

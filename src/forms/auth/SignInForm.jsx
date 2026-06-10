@@ -56,6 +56,9 @@ const SignInForm = () => {
         case "SAD":
           navigate("/sad/register", { replace: true });
           break;
+        case "DEPT":
+          navigate("/dept/dashboard", { replace: true });
+          break;
         default:
           navigate("/", { replace: true });
       }

@@ -160,6 +160,20 @@ const theme = extendTheme({
       900: "#174a63",
       950: "#102f41",
     },
+    // Brown
+    brown: {
+      50: "#fcfbf7",
+      100: "#F9F8F4",
+      200: "#F4EFE1",
+      300: "#EFE8D8",
+      400: "#DDCCA9",
+      500: "#b2996c",
+      600: "#564122",
+      700: "#44321A",
+      800: "#352513",
+      900: "#2D1E0F",
+      950: "#24170b",
+    },
   },
   components: {
     Accordion: accordionTheme,
@@ -184,8 +198,8 @@ const theme = extendTheme({
   styles: {
     global: (props) => ({
       body: {
-        bg: mode("white", "zinc.950")(props),
-        color: mode("zinc.950", "zinc.50")(props),
+        bg: mode("white", "brown.950")(props),
+        color: mode("brown.950", "brown.50")(props),
       },
     }),
   },

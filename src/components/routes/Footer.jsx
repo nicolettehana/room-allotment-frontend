@@ -7,7 +7,7 @@ const Footer = () => {
       <Box
         py={4}
         //bg="paper"
-        bg="zinc.50"
+        bg="brown.50"
         roundedTop="2xl"
         border="1px"
         borderBottom="0px"
@@ -16,12 +16,12 @@ const Footer = () => {
       >
         <VStack>
           <VStack spacing={0}>
-            <Text fontSize="xs" textAlign="center" color="brand.800">
+            <Text fontSize="xs" textAlign="center" color="brown.600">
               Content owned by Secretariat Administration Department, Government
               of Meghalaya
             </Text>
 
-            <Text fontSize="xs" textAlign="center" color="brand.800">
+            <Text fontSize="xs" textAlign="center" color="brown.600">
               Developed and hosted by National Informatics Centre, Meghalaya
             </Text>
           </VStack>
