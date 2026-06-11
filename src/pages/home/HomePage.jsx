@@ -41,7 +41,7 @@ const HomePage = () => {
                 <Box
                   //bg="brand.100"
                   //bg="paper"
-                  // bg="white"
+                  bg="brown.50"
                   border="1px"
                   borderColor="border"
                   rounded="2xl"

@@ -10,6 +10,7 @@ const SelectFieldSearchable = ({
   placeholder,
   disabled = false,
   options = [],
+  onChange,
 }) => {
   return (
     <Field name={name}>
@@ -22,7 +23,9 @@ const SelectFieldSearchable = ({
             isRequired={isRequired}
             isInvalid={meta.error && meta.touched}
           >
-            <FormLabel htmlFor={name} fontSize="sm">{label}</FormLabel>
+            <FormLabel htmlFor={name} fontSize="sm">
+              {label}
+            </FormLabel>
 
             {/* 🔥 React Select replaces Chakra Select */}
             <ReactSelect
@@ -32,9 +35,16 @@ const SelectFieldSearchable = ({
               placeholder={placeholder}
               isSearchable // 🔥 enables typing + searching
               isDisabled={disabled} // 🔥 use the prop here
-              onChange={(option) =>
-                form.setFieldValue(name, option ? option.value : "")
-              }
+              // onChange={(option) =>
+              //   form.setFieldValue(name, option ? option.value : "")
+              // }
+              onChange={(option) => {
+                form.setFieldValue(name, option ? option.value : "");
+
+                if (onChange) {
+                  onChange(option);
+                }
+              }}
               onBlur={() => form.setFieldTouched(name, true)}
             />
 

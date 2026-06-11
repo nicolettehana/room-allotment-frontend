@@ -40,6 +40,7 @@ import YearMonthFilter from "../../components/filter/YearMonthFIlter";
 import PurposeFilter from "../../components/filter/PurposeFilter";
 import VisitorPieChart from "../../components/charts/VisitorPieChart";
 import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
+import { MdOutlineAddCircleOutline } from "react-icons/md";
 
 const DeptDashboardPage = () => {
   const currentDate = new Date();
@@ -182,6 +183,17 @@ const DeptDashboardPage = () => {
                     setPurpose={setPurpose}
                     setPageNumber={setPageNumber}
                   />
+                </HStack>
+                <HStack w="100%" justify="flex-end" p={6}>
+                  {/* {hasPermission(role, "canAddCategory") && ( */}
+                  <Button
+                    variant="brand"
+                    leftIcon={<MdOutlineAddCircleOutline />}
+                    onClick={() => navigate("/dept/create-booking")}
+                  >
+                    New Booking
+                  </Button>
+                  {/* )} */}
                 </HStack>
               </HStack>
               <Text fontWeight="bold">

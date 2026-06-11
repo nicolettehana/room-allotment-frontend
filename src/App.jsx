@@ -22,6 +22,8 @@ import DashboardSADPage from "./pages/sad/DashboardSADPage";
 import VisitorLoginPage from "./pages/home/VisitorLoginPage";
 import DeptRoutes from "./components/routes/DeptRoutes";
 import DeptDashboardPage from "./pages/dept/DeptDashboardPage";
+import BookingHistoryPage from "./pages/dept/bookingHistory/BookingHistoryPage";
+import CreateBookingPage from "./pages/dept/CreateBookingPage";
 
 const App = () => {
   return (
@@ -65,7 +67,8 @@ const App = () => {
         <Route path="/dept" element={<DeptRoutes />}>
           {/* Dashboard */}
           <Route path="dashboard" element={<DeptDashboardPage />} />
-          {/* <Route path="visitors" element={<VisitorsAdminPage />} /> */}
+          <Route path="create-booking" element={<CreateBookingPage />} />
+          <Route path="booking-history" element={<BookingHistoryPage />} />
 
           {/* Profile */}
           <Route path="profile" element={<UserProfilePage />} />

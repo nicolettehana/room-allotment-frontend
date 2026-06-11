@@ -14,9 +14,11 @@ const InputField = ({ name, label, isRequired = true, ...others }) => {
           isRequired={isRequired}
           isInvalid={meta.error && meta.touched}
         >
-          <FormLabel htmlFor={name} fontSize="sm" mb={1}>{label}</FormLabel>
+          <FormLabel htmlFor={name} fontSize="sm" mb={1}>
+            {label}
+          </FormLabel>
           <Input
-            type="text"
+            //type="text"
             // variant="brand"
             id={name}
             {...field}

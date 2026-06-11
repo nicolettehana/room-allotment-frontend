@@ -7,7 +7,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 const brand = definePartsStyle({
   field: {
     border: "1px",
-    bg: "transparent",
+    bg: "paper",
 
     _light: {
       borderColor: "zinc.300",
