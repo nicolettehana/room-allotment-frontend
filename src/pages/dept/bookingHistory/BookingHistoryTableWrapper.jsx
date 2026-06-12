@@ -197,7 +197,7 @@ const BookingHistoryTableWrapper = ({
               <Th>Date & Time</Th>
               <Th>Hall</Th>
               <Th>No. of Attendees</Th>
-              <Th>Addl. Remarks</Th>
+              <Th>Remarks</Th>
               <Th>Contact Person Details</Th>
             </Tr>
           </Thead>
@@ -225,7 +225,7 @@ const BookingHistoryTableWrapper = ({
                   <Td>
                     {row?.meetingDate}
                     <br />
-                    {new Date(`1970-01-01T${row.startTime}`).toLocaleTimeString(
+                    {new Date(`1970-01-01T${row?.startTime}`).toLocaleTimeString(
                       "en-US",
                       {
                         hour: "numeric",
@@ -233,7 +233,7 @@ const BookingHistoryTableWrapper = ({
                       },
                     )}
                     {" - "}
-                    {new Date(`1970-01-01T${row.endTime}`).toLocaleTimeString(
+                    {new Date(`1970-01-01T${row?.endTime}`).toLocaleTimeString(
                       "en-US",
                       {
                         hour: "numeric",
