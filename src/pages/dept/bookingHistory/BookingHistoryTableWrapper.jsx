@@ -44,6 +44,7 @@ import VisitorPassModal from "./VisitorPassModal";
 import dayjs from "dayjs";
 import { TiCancel } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";
+import { GrFormView } from "react-icons/gr";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -282,7 +283,7 @@ const BookingHistoryTableWrapper = ({
                     </Badge>
                   </Td>
                   <Td>
-                    <VStack>
+                    <VStack align="stretch">
                       {row?.appStatus === 1 && (
                         <Button
                           variant="brand"
@@ -310,8 +311,23 @@ const BookingHistoryTableWrapper = ({
                       >
                         Cancel
                       </Button>
-                      )
-            }
+                      )}
+                      {(row?.appStatus === 4 )&& (<Button
+                        variant="brand"
+                        colorScheme="brand"
+                        minW="auto"
+                        //lineHeight="1"
+                        size="xs"
+                        rightIcon={<GrFormView />}
+                        // onClick={() => {
+                        //   setRowState(row);
+
+                        //   deleteDisclosure.onOpen();
+                        // }}
+                      >
+                        View Remark
+                      </Button>
+                      )}
                     </VStack>
                   </Td>
                   <Td>
