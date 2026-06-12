@@ -82,7 +82,7 @@ const UsersNavbar = ({ onOpen, openLogout, profile }) => {
               rounded="full"
               _focusVisible={{
                 ring: 2,
-                ringColor: useColorModeValue("zinc.950", "white"),
+                ringColor: useColorModeValue("brown.950", "white"),
                 ringOffset: "2px",
                 ringOffsetColor: "background",
               }}
@@ -91,13 +91,13 @@ const UsersNavbar = ({ onOpen, openLogout, profile }) => {
                 name={profile?.name}
                 ring="1px"
                 ringColor="border"
-                bg={useColorModeValue("zinc.100", "zinc.900")}
-                color={useColorModeValue("zinc.950", "zinc.50")}
+                bg={useColorModeValue("brown.100", "brown.900")}
+                color={useColorModeValue("brown.950", "brown.50")}
               >
                 <AvatarBadge
                   boxSize="1rem"
-                  bg="lgreen.900"
-                  borderColor={useColorModeValue("lgreen.200", "lgreen.800")}
+                  bg="brown.500"
+                  borderColor={useColorModeValue("brown.200", "brown.800")}
                 />
               </Avatar>
             </MenuButton>

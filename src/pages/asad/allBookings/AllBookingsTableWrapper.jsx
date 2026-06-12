@@ -28,15 +28,6 @@ import {
   useDisclosure,
   useToast,
   VStack,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
-  ModalOverlay,
-  ModalHeader,
-  RadioGroup,
-  Radio,
-  SelectField,
 } from "@chakra-ui/react";
 import {
   MdOutlineInfo,
@@ -49,8 +40,8 @@ import { useNavigate } from "react-router-dom";
 import { IoDocumentText } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import dayjs from "dayjs";
-import { MdNavigateNext } from "react-icons/md";
-import TakeActionModal from "./TakeActionModal";
+import { TiCancel } from "react-icons/ti";
+import { FaEdit } from "react-icons/fa";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -84,7 +75,7 @@ const getStatusColorScheme = (status) => {
   }
 };
 
-const InboxTableWrapper = ({
+const AllBookingsTableWrapper = ({
   isEstate = true,
   query,
   searchText,
@@ -94,16 +85,13 @@ const InboxTableWrapper = ({
   // States
   const [rowState, setRowState] = useState({});
   const [selectedVisitorId, setSelectedVisitorId] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedVisitorCode, setSelectedVisitorCode] = useState(null);
   const [selectedVPassNo, setSelectedVPassNo] = useState(null);
-  const [withPhoto, setWithPhoto] = useState(0);
 
   // Hooks
   const toast = useToast();
   const navigate = useNavigate();
-
-  //Disclosures
-  const takeActionDisclosure = useDisclosure();
 
   // Queries
   const queryClient = useQueryClient();
@@ -189,35 +177,6 @@ const InboxTableWrapper = ({
     );
   }
 
-  const handleTakeAction = () => {
-    // exportVisitorsMutation.mutate(
-    //   {
-    //     startDate,
-    //     endDate,
-    //     format: format,
-    //     withPhoto: withPhoto,
-    //   },
-    //   {
-    //     onSuccess: (response) => {
-    //       console.log("Success");
-    //       const mimeType =
-    //         format === "PDF"
-    //           ? "application/pdf"
-    //           : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    //       const blob = new Blob([response], { type: mimeType });
-    //       const url = window.URL.createObjectURL(blob);
-    //       const link = document.createElement("a");
-    //       link.href = url;
-    //       link.download = `Visitors_${startDate}-${endDate}.${extension}`;
-    //       document.body.appendChild(link);
-    //       link.click();
-    //       link.remove();
-    //       onClose();
-    //     },
-    //   },
-    // );
-  };
-
   return (
     <Stack spacing={4}>
       {selectedVisitorCode && (
@@ -241,13 +200,6 @@ const InboxTableWrapper = ({
           }}
         />
       )}
-
-      <TakeActionModal
-        isOpen={takeActionDisclosure.isOpen}
-        onClose={takeActionDisclosure.onClose}
-        data={rowState}
-      />
-
       {/* Table */}
       <TableContainer>
         <Table>
@@ -255,14 +207,15 @@ const InboxTableWrapper = ({
             <Tr>
               <Th>Sl. No.</Th>
               <Th>Booking ID.</Th>
-              <Th>Department/Office</Th>
+              <Th>Department</Th>
               <Th>Purpose</Th>
               <Th>Date & Time</Th>
               <Th>Hall</Th>
               <Th>No. of Attendees</Th>
+              <Th>Status</Th>
+              {/* <Th>Action</Th> */}
               <Th>Remarks</Th>
               <Th>Contact Person Details</Th>
-              <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -285,7 +238,7 @@ const InboxTableWrapper = ({
                     </SkeletonText>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">{row?.bookingId}</Text>
+                    <Text fontSize="sm">{row?.id}</Text>
                   </Td>
                   <Td>
                     <Text fontSize="sm">{row?.department}</Text>
@@ -295,9 +248,7 @@ const InboxTableWrapper = ({
                   </Td>
                   <Td>
                     <Text fontSize="sm">
-                      {new Date(row.meetingDate)
-                        .toLocaleDateString("en-GB")
-                        .replace(/\//g, "-")}
+                      {row?.meetingDate}
                       <br />
                       {new Date(
                         `1970-01-01T${row?.startTime}`,
@@ -324,7 +275,31 @@ const InboxTableWrapper = ({
                   <Td>
                     <Text fontSize="sm">{row?.noOfAttendees}</Text>
                   </Td>
+                  <Td>
+                    <Badge
+                      colorScheme={getStatusColorScheme(row?.status)}
+                      size="sm"
+                    >
+                      {row?.status}
+                    </Badge>
+                  </Td>
+                  {/* <Td>
+                    <Button
+                      variant="brand"
+                      colorScheme="brand"
+                      minW="auto"
+                      //lineHeight="1"
+                      size="xs"
+                      rightIcon={<TiCancel />}
+                      // onClick={() => {
+                      //   setRowState(row);
 
+                      //   deleteDisclosure.onOpen();
+                      // }}
+                    >
+                      Cancel
+                    </Button>
+                  </Td> */}
                   <Td>
                     <Text fontSize="sm">{row?.remarks}</Text>
                   </Td>
@@ -336,25 +311,6 @@ const InboxTableWrapper = ({
                       <br />
                       {row?.contactMobileNo}
                     </Text>
-                  </Td>
-                  <Td>
-                    <VStack>
-                      {row?.appStatus === 1 && (
-                        <Button
-                          variant="brand"
-                          colorScheme="brand"
-                          minW="auto"
-                          onClick={() => {
-                            setRowState(row);
-                            takeActionDisclosure.onOpen();
-                          }}
-                          size="xs"
-                          rightIcon={<MdNavigateNext />}
-                        >
-                          Take Action
-                        </Button>
-                      )}
-                    </VStack>
                   </Td>
                 </Tr>
               );
@@ -373,4 +329,4 @@ const InboxTableWrapper = ({
   );
 };
 
-export default InboxTableWrapper;
+export default AllBookingsTableWrapper;

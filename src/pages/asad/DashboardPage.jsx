@@ -42,6 +42,7 @@ import VisitorPieChart from "../../components/charts/VisitorPieChart";
 import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
 import StatCard2 from "../../components/core/theme/StatCard2";
 import { Link } from "react-router-dom";
+import { useFetchPendingBookings } from "../../hooks/hallBookingQueries";
 
 const DashboardPage = () => {
   const currentDate = new Date();
@@ -81,6 +82,7 @@ const DashboardPage = () => {
   const profileQuery = useFetchUsersProfile();
   const statsQuery = useFetchStats(month, year, purpose, officeCode);
   const purposeStatsQuery = useFetchPurposeStats(month, year, officeCode);
+  const pendingBookingsQuery = useFetchPendingBookings(0, 10);
 
   const visitorsQuery = useFetchVisitors(
     searchValue,
@@ -158,7 +160,7 @@ const DashboardPage = () => {
           <Container minW="full">
             <StatCard2
               title="Pending Requests"
-              value={12}
+              value={pendingBookingsQuery?.data?.data?.totalElements}
               categoryCode="EVENT"
               onClick={() => navigate("/asad/inbox")}
             />
