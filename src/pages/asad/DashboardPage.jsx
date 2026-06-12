@@ -40,6 +40,8 @@ import YearMonthFilter from "../../components/filter/YearMonthFIlter";
 import PurposeFilter from "../../components/filter/PurposeFilter";
 import VisitorPieChart from "../../components/charts/VisitorPieChart";
 import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
+import StatCard2 from "../../components/core/theme/StatCard2";
+import { Link } from "react-router-dom";
 
 const DashboardPage = () => {
   const currentDate = new Date();
@@ -154,7 +156,13 @@ const DashboardPage = () => {
       <Main>
         <Section>
           <Container minW="full">
-            <Stack spacing={4}>
+            <StatCard2
+              title="Pending Requests"
+              value={12}
+              categoryCode="EVENT"
+              onClick={() => navigate("/asad/inbox")}
+            />
+            <Stack spacing={4} mt={4}>
               {/* Filter */}
 
               <HStack justifyContent="space-between" spacing={2}>

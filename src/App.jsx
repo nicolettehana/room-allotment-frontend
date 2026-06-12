@@ -24,6 +24,7 @@ import DeptRoutes from "./components/routes/DeptRoutes";
 import DeptDashboardPage from "./pages/dept/DeptDashboardPage";
 import BookingHistoryPage from "./pages/dept/bookingHistory/BookingHistoryPage";
 import CreateBookingPage from "./pages/dept/CreateBookingPage";
+import InboxPage from "./pages/asad/inbox/InboxPage";
 
 const App = () => {
   return (
@@ -57,7 +58,7 @@ const App = () => {
         <Route path="/asad" element={<ASADRoutes />}>
           {/* Dashboard */}
           <Route path="dashboard" element={<DashboardPage />} />
-          <Route path="visitors" element={<VisitorsAdminPage />} />
+          <Route path="inbox" element={<InboxPage />} />
 
           {/* Profile */}
           <Route path="profile" element={<UserProfilePage />} />

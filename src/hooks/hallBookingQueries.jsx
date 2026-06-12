@@ -67,3 +67,23 @@ export const useFetchHistory = (
       ),
   });
 };
+
+/**
+ * ----------------------------
+ * GET: Fetch Pending Bookings
+ * ----------------------------
+ */
+const fetchPendingBookings = (axiosClient, pageNumber, pageSize) => {
+  return axiosClient.get(
+    `/booking/pending?page=${pageNumber}&size=${pageSize}`,
+  );
+};
+
+export const useFetchPendingBookings = (pageNumber, pageSize) => {
+  const { axiosClient } = useAuthContext();
+
+  return useQuery({
+    queryKey: ["pending-bookings", pageNumber, pageSize],
+    queryFn: () => fetchPendingBookings(axiosClient, pageNumber, pageSize),
+  });
+};

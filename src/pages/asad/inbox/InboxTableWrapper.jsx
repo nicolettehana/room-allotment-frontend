@@ -39,11 +39,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { IoDocumentText } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import VisitorPhotoModal from "./VisitorPhotoModal";
-import VisitorPassModal from "./VisitorPassModal";
 import dayjs from "dayjs";
-import { TiCancel } from "react-icons/ti";
-import { FaEdit } from "react-icons/fa";
+import { MdNavigateNext } from "react-icons/md";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -77,7 +74,7 @@ const getStatusColorScheme = (status) => {
   }
 };
 
-const BookingHistoryTableWrapper = ({
+const InboxTableWrapper = ({
   isEstate = true,
   query,
   searchText,
@@ -209,14 +206,14 @@ const BookingHistoryTableWrapper = ({
             <Tr>
               <Th>Sl. No.</Th>
               <Th>Booking ID.</Th>
+              <Th>Department/Office</Th>
               <Th>Purpose</Th>
               <Th>Date & Time</Th>
               <Th>Hall</Th>
               <Th>No. of Attendees</Th>
-              <Th>Status</Th>
-              <Th>Action</Th>
               <Th>Remarks</Th>
               <Th>Contact Person Details</Th>
+              <Th>Action</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -240,6 +237,9 @@ const BookingHistoryTableWrapper = ({
                   </Td>
                   <Td>
                     <Text fontSize="sm">{row?.id}</Text>
+                  </Td>
+                  <Td>
+                    <Text fontSize="sm">{row?.department}</Text>
                   </Td>
                   <Td>
                     <Text fontSize="sm">{row?.purpose}</Text>
@@ -273,45 +273,7 @@ const BookingHistoryTableWrapper = ({
                   <Td>
                     <Text fontSize="sm">{row?.noOfAttendees}</Text>
                   </Td>
-                  <Td>
-                    <Badge
-                      colorScheme={getStatusColorScheme(row?.status)}
-                      size="sm"
-                    >
-                      {row?.status}
-                    </Badge>
-                  </Td>
-                  <Td>
-                    <VStack>
-                      {row?.appStatus === 1 && (
-                        <Button
-                          variant="brand"
-                          colorScheme="brand"
-                          minW="auto"
-                          //lineHeight="1"
-                          size="xs"
-                          rightIcon={<FaEdit />}
-                        >
-                          Edit
-                        </Button>
-                      )}
-                      <Button
-                        variant="brand"
-                        colorScheme="brand"
-                        minW="auto"
-                        //lineHeight="1"
-                        size="xs"
-                        rightIcon={<TiCancel />}
-                        // onClick={() => {
-                        //   setRowState(row);
 
-                        //   deleteDisclosure.onOpen();
-                        // }}
-                      >
-                        Cancel
-                      </Button>
-                    </VStack>
-                  </Td>
                   <Td>
                     <Text fontSize="sm">{row?.remarks}</Text>
                   </Td>
@@ -323,6 +285,22 @@ const BookingHistoryTableWrapper = ({
                       <br />
                       {row?.contactMobileNo}
                     </Text>
+                  </Td>
+                  <Td>
+                    <VStack>
+                      {row?.appStatus === 1 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<MdNavigateNext />}
+                        >
+                          Take Action
+                        </Button>
+                      )}
+                    </VStack>
                   </Td>
                 </Tr>
               );
@@ -341,4 +319,4 @@ const BookingHistoryTableWrapper = ({
   );
 };
 
-export default BookingHistoryTableWrapper;
+export default InboxTableWrapper;

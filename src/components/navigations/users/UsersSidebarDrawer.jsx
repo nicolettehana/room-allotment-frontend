@@ -39,7 +39,7 @@ const UsersSidebarDrawer = ({ isOpen, onClose }) => {
         backdropBlur="18px"
         backdropSaturate="180%"
       />
-      <DrawerContent bg="black">
+      <DrawerContent bg="brown.900">
         <DrawerCloseButton />
         <DrawerHeader bg="gray.800">
           <Heading size="md" color="white">
@@ -47,7 +47,7 @@ const UsersSidebarDrawer = ({ isOpen, onClose }) => {
           </Heading>
         </DrawerHeader>
 
-        <DrawerBody as="nav" bg="gray.800">
+        <DrawerBody as="nav" bg="brown.900">
           <Stack spacing={1}>
             <Text fontSize="2xs" mb={2} letterSpacing="wider">
               MENU

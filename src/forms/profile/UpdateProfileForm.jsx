@@ -40,17 +40,17 @@ const UpdateProfileForm = ({ profileQuery }) => {
           "Oops! Something went wrong. Couldn't update profile.",
       });
       return error;
-    }
+    },
   );
 
   // Formik
   const initialValues = {
-    name: profileQuery?.data?.data?.name,
-    email: profileQuery?.data?.data?.email
-      ? decodeEmail(profileQuery?.data?.data?.email)
+    name: profileQuery?.data?.name,
+    email: profileQuery?.data?.email
+      ? decodeEmail(profileQuery?.data?.email)
       : "",
-    designation: profileQuery?.data?.data?.designation,
-    department: profileQuery?.data?.data?.department,
+    designation: profileQuery?.data?.designation,
+    department: profileQuery?.data?.department,
   };
 
   const validationSchema = yup.object({

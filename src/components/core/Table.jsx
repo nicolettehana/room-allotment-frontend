@@ -22,12 +22,12 @@ export const TableContainer = ({ children, ...others }) => {
       __css={{
         "&::-webkit-scrollbar": {
           h: "8px",
-          bg: useColorModeValue("zinc.300", "zinc.700"),
+          bg: useColorModeValue("brown.300", "brown.700"),
         },
         "&::-webkit-scrollbar-thumb": {
           cursor: "pointer",
           borderRadius: "full",
-          bg: useColorModeValue("zinc.400", "zinc.600"),
+          bg: useColorModeValue("brown.400", "brown.600"),
         },
       }}
       {...others}
@@ -47,7 +47,13 @@ export const Table = ({ children }) => {
 
 export const Thead = ({ children }) => {
   return (
-    <Box as="thead" bg="zinc.200" borderBottom="1px" borderColor="border">
+    <Box
+      as="thead"
+      bg="brown.300"
+      color="brown.200"
+      borderBottom="1px"
+      borderColor="border"
+    >
       {children}
     </Box>
   );
@@ -60,20 +66,15 @@ export const Tr = ({ children, ...others }) => {
       p={4}
       borderBottom="1px"
       borderColor="border"
-
       transition="background-color 0.15s ease-in-out"
-
       /* Alternating row colors */
       _even={{
-        bg: useColorModeValue("zinc.50", "zinc.800"),
+        bg: useColorModeValue("brown.50", "brown.800"),
       }}
-
       /* Hover highlight */
       _hover={{
-        bg: useColorModeValue("zinc.100", "zinc.700"),
+        bg: useColorModeValue("brown.100", "brown.700"),
       }}
-
-
       _last={{
         borderBottom: "0px",
       }}

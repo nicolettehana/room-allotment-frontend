@@ -78,8 +78,8 @@ const UserProfilePage = () => {
                 >
                   <AvatarBadge
                     boxSize="1.25rem"
-                    bg="lgreen.900"
-                    borderColor={useColorModeValue("lgreen.200", "lgreen.800")}
+                    bg="brown.500"
+                    borderColor={useColorModeValue("brown.200", "brown.800")}
                   />
                 </Avatar>
                 <VStack spacing={0}>
@@ -95,8 +95,8 @@ const UserProfilePage = () => {
                     {profileQuery?.data?.data?.role === "ADMIN"
                       ? "SuperAdmin"
                       : profileQuery?.data?.data?.role === "ASAD"
-                        ? "Admin"
-                        : "Security"}
+                        ? "SAD (Nazir)"
+                        : "Department"}
                   </Text>
                 </SimpleGrid>
 
@@ -104,31 +104,31 @@ const UserProfilePage = () => {
                   <Text color="body">Email</Text>
                   <Text>
                     {profileQuery?.data?.data?.email
-                      ? encodeEmail(profileQuery?.data?.data?.email)
+                      ? encodeEmail(profileQuery?.data?.email)
                       : "-"}
                   </Text>
                 </SimpleGrid>
 
                 <SimpleGrid columns={2} gap={4}>
                   <Text color="body">Department</Text>
-                  <Text>{profileQuery?.data?.data?.department}</Text>
+                  <Text>{profileQuery?.data?.department}</Text>
                 </SimpleGrid>
 
                 {profileQuery?.data?.data?.office && (
                   <SimpleGrid columns={2} gap={4}>
                     <Text color="body">Office</Text>
-                    <Text>{profileQuery?.data?.data?.office}</Text>
+                    <Text>{profileQuery?.data?.office}</Text>
                   </SimpleGrid>
                 )}
 
                 <SimpleGrid columns={2} gap={4}>
                   <Text color="body">Designation</Text>
-                  <Text>{profileQuery?.data?.data?.designation}</Text>
+                  <Text>{profileQuery?.data?.designation}</Text>
                 </SimpleGrid>
 
                 <SimpleGrid columns={2} gap={4}>
                   <Text color="body">Mobile Number</Text>
-                  <Text>{profileQuery?.data?.data?.mobileno}</Text>
+                  <Text>{profileQuery?.data?.mobileno}</Text>
                 </SimpleGrid>
               </Stack>
 

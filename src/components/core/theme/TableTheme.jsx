@@ -6,7 +6,7 @@ const { definePartsStyle, defineMultiStyleConfig } =
 
 const baseStyle = definePartsStyle({
   thead: {
-    bg: "zinc.100",
+    bg: "brown.100",
   },
 });
 
