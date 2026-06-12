@@ -60,6 +60,21 @@ function formatDateTime(dateTimeStr) {
   return `${day}-${month}-${year} ${hours}:${minutes} ${ampm}`;
 }
 
+const getStatusColorScheme = (status) => {
+  switch (status?.toLowerCase()) {
+    case "pending":
+      return "blue";
+    case "allotted":
+      return "green";
+    case "rejected":
+      return "red";
+    case "reschedule requested":
+      return "orange";
+    default:
+      return "gray";
+  }
+};
+
 const BookingHistoryTableWrapper = ({
   isEstate = true,
   query,
@@ -197,6 +212,7 @@ const BookingHistoryTableWrapper = ({
               <Th>Date & Time</Th>
               <Th>Hall</Th>
               <Th>No. of Attendees</Th>
+              <Th>Status</Th>
               <Th>Remarks</Th>
               <Th>Contact Person Details</Th>
             </Tr>
@@ -225,13 +241,12 @@ const BookingHistoryTableWrapper = ({
                   <Td>
                     {row?.meetingDate}
                     <br />
-                    {new Date(`1970-01-01T${row?.startTime}`).toLocaleTimeString(
-                      "en-US",
-                      {
-                        hour: "numeric",
-                        minute: "2-digit",
-                      },
-                    )}
+                    {new Date(
+                      `1970-01-01T${row?.startTime}`,
+                    ).toLocaleTimeString("en-US", {
+                      hour: "numeric",
+                      minute: "2-digit",
+                    })}
                     {" - "}
                     {new Date(`1970-01-01T${row?.endTime}`).toLocaleTimeString(
                       "en-US",
@@ -242,11 +257,16 @@ const BookingHistoryTableWrapper = ({
                     )}
                   </Td>
                   <Td>
-                    {row?.hallOfficeCode}
+                    {row?.buildingName}
                     <br />
-                    {row?.hallId}
+                    {row?.hallName}
                   </Td>
                   <Td>{row?.noOfAttendees}</Td>
+                  <Td>
+                    <Badge colorScheme={getStatusColorScheme(row?.status)}>
+                      {row?.status}
+                    </Badge>
+                  </Td>
                   <Td>{row?.remarks}</Td>
                   <Td>
                     {row?.contactName}

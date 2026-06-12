@@ -13,7 +13,7 @@ const brand = defineStyle({
     },
 
     _active: {
-      bg: "lgreen.800",
+      bg: "brown.800",
     },
 
     _focusVisible: {

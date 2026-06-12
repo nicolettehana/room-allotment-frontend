@@ -25,8 +25,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { useExportVisitors } from "../../../hooks/visitorQueries";
-import { useFetchVisitors } from "../../../hooks/visitorQueries";
 import VisitorsTableWrapper from "./BookingHistoryTableWrapper";
 import SearchInput from "../../../components/core/SearchInput";
 import { useDebounce } from "use-debounce";
@@ -51,7 +49,7 @@ const BookingHistoryPage = () => {
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
   const [endDate, setEndDate] = useState(
-    dayjs().startOf("day").format("YYYY-MM-DD"),
+    dayjs().add(30, "day").startOf("day").format("YYYY-MM-DD"),
   );
   const { role } = useAuth();
 
@@ -63,15 +61,6 @@ const BookingHistoryPage = () => {
 
   const profileQuery = useFetchUsersProfile();
 
-  const visitorsQuery = useFetchVisitors(
-    searchValue,
-    pageNumber,
-    pageSize,
-    startDate,
-    endDate,
-    officeCode,
-  );
-
   const historyQuery = useFetchHistory(
     searchValue,
     pageNumber,
@@ -79,8 +68,6 @@ const BookingHistoryPage = () => {
     startDate,
     endDate,
   );
-
-  const exportVisitorsMutation = useExportVisitors();
 
   //Disclosures
   const { isOpen, onOpen, onClose } = useDisclosure();

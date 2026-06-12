@@ -83,7 +83,7 @@ const DateFilter = ({
                   setPageNumber(0);
                 }}
                 min={fromDate}
-                max={today}
+                //max={today + 30}
               />
             </FormControl>
           </Stack>
