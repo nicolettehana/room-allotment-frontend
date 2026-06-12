@@ -238,7 +238,7 @@ const AllBookingsTableWrapper = ({
                     </SkeletonText>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">{row?.id}</Text>
+                    <Text fontSize="sm">{row?.bookingId}</Text>
                   </Td>
                   <Td>
                     <Text fontSize="sm">{row?.department}</Text>

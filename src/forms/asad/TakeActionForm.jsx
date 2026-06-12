@@ -24,6 +24,7 @@ import SelectFieldSearchable from "../../components/core/formik/SelectFieldSearc
 import dayjs from "dayjs";
 import { MdHorizontalRule } from "react-icons/md";
 import { useAuth } from "../../components/auth/useAuth";
+import { useTakeAction } from "../../hooks/hallBookingQueries";
 
 const TakeActionForm = ({ data, onSuccess }) => {
   const { role } = useAuth();
@@ -32,50 +33,58 @@ const TakeActionForm = ({ data, onSuccess }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // const createPurchase = useCreatePurchaseReceipt(
-  //   (response) => {
-  //     queryClient.invalidateQueries({ queryKey: ["purchase"] });
-  //     role === "SAD"
-  //       ? navigate("/sad/purchase")
-  //       : navigate("/purchase/purchase");
-  //     onSuccess?.();
-  //     toast({
-  //       isClosable: true,
-  //       duration: 3000,
-  //       position: "top-right",
-  //       status: "success",
-  //       title: "Success",
-  //       description: response.data.detail || "Purchase receipt added",
-  //     });
-  //   },
-  //   (error) => {
-  //     toast({
-  //       isClosable: true,
-  //       duration: 3000,
-  //       position: "top-right",
-  //       status: "error",
-  //       title: "Error",
-  //       description:
-  //         error.response.data.detail || "Unable to add purchase receipt.",
-  //     });
-  //   },
-  // );
+  const takeAction = useTakeAction(
+    (response) => {
+      console.log("SUCCESS", response);
+      queryClient.invalidateQueries({ queryKey: ["pending-bookings"] });
+      navigate("/asad/inbox");
+      //onClose();
+      onSuccess(); 
+      toast({
+        isClosable: true,
+        duration: 3000,
+        position: "top-right",
+        status: "success",
+        title: "Success",
+        description: response?.data?.detail || "Success",
+      });
+
+      return response;
+    },
+    (error) => {
+      console.log("ERROR", error);
+      toast({
+        isClosable: true,
+        duration: 3000,
+        position: "top-right",
+        status: "error",
+        title: "Error",
+        description:
+          error?.response?.data?.detail || "Error",
+      });
+      return error;
+    },
+  );
+
 
   const initialValues = {
     remark: "",
     action: "",
+    bookingId: data?.bookingId
   };
 
   const validationSchema = yup.object({
-    remark: yup.string().required("Remark is required"),
+    remark: yup.string(),
     //remarks: yup.string(),
     action: yup.string().required("Action is required"),
+    bookingId: yup.string()
+
   });
 
   const onSubmit = (values) => {
     const formData = { ...values };
     console.log("form data: ", formData);
-    //createPurchase.mutate(formData);
+    takeAction.mutate(formData);
   };
 
   return (
@@ -197,7 +206,7 @@ const TakeActionForm = ({ data, onSuccess }) => {
                 <Button
                   type="submit"
                   variant="brand"
-                  //isLoading={createPurchase.isPending}
+                  isLoading={takeAction.isPending}
                   loadingText="Saving"
                   mb={4}
                 >

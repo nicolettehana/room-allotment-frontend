@@ -87,3 +87,23 @@ export const useFetchPendingBookings = (pageNumber, pageSize) => {
     queryFn: () => fetchPendingBookings(axiosClient, pageNumber, pageSize),
   });
 };
+
+
+/**
+ * ----------------------------
+ * POST: Take Action
+ * ----------------------------
+ */
+const takeAction = (axiosClient, data) => {
+  return axiosClient.post("/booking/action", data);
+};
+
+export const useTakeAction = (onSuccess, onError) => {
+  const { axiosClient } = useAuthContext();
+
+  return useMutation({
+    mutationFn: (data) => takeAction(axiosClient, data),
+    onSuccess,
+    onError,
+  });
+};

@@ -239,7 +239,7 @@ const BookingHistoryTableWrapper = ({
                     </SkeletonText>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">{row?.id}</Text>
+                    <Text fontSize="sm">{row?.bookingId}</Text>
                   </Td>
                   <Td>
                     <Text fontSize="sm">{row?.purpose}</Text>
@@ -295,7 +295,7 @@ const BookingHistoryTableWrapper = ({
                           Edit
                         </Button>
                       )}
-                      <Button
+                      {(row?.appStatus !== 4 && row?.appStatus !== 5 )&& (<Button
                         variant="brand"
                         colorScheme="brand"
                         minW="auto"
@@ -310,6 +310,8 @@ const BookingHistoryTableWrapper = ({
                       >
                         Cancel
                       </Button>
+                      )
+            }
                     </VStack>
                   </Td>
                   <Td>
