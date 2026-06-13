@@ -12,9 +12,12 @@ import {
 import { MdOutlineFilterList } from "react-icons/md";
 
 const STATUS_OPTIONS = [
-  { label: "All", value: "A" },
-  { label: "Pending", value: "P" },
-  { label: "Received", value: "R" },
+  { label: "All", value: "0" },
+  { label: "Pending", value: "1" },
+  { label: "Allotted", value: "2" },
+  { label: "Reschedule Requested", value: "3" },
+  { label: "Rejected", value: "4" },
+  { label: "Cancelled", value: "5" },
 ];
 
 const StatusFilter = ({

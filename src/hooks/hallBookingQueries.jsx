@@ -32,9 +32,10 @@ const fetchHistory = (
   pageSize,
   startDate,
   endDate,
+  status
 ) => {
   return axiosClient.get(
-    `/booking?page=${pageNumber}&size=${pageSize}&search=${searchValue}&startDate=${startDate}&endDate=${endDate}`,
+    `/booking?page=${pageNumber}&size=${pageSize}&search=${searchValue}&startDate=${startDate}&endDate=${endDate}&status=${status}`,
   );
 };
 
@@ -44,6 +45,7 @@ export const useFetchHistory = (
   pageSize,
   startDate,
   endDate,
+  status
 ) => {
   const { axiosClient } = useAuthContext();
 
@@ -55,6 +57,7 @@ export const useFetchHistory = (
       pageSize,
       startDate,
       endDate,
+      status
     ],
     queryFn: () =>
       fetchHistory(
@@ -64,6 +67,7 @@ export const useFetchHistory = (
         pageSize,
         startDate,
         endDate,
+        status
       ),
   });
 };
@@ -103,6 +107,25 @@ export const useTakeAction = (onSuccess, onError) => {
 
   return useMutation({
     mutationFn: (data) => takeAction(axiosClient, data),
+    onSuccess,
+    onError,
+  });
+};
+
+/**
+ * ----------------------------
+ * POST: Get Nazir Remark
+ * ----------------------------
+ */
+const getRemark = (axiosClient, data) => {
+  return axiosClient.post("/booking/get-remark", data);
+};
+
+export const useGetRemark = (onSuccess, onError) => {
+  const { axiosClient } = useAuthContext();
+
+  return useMutation({
+    mutationFn: (data) => getRemark(axiosClient, data),
     onSuccess,
     onError,
   });

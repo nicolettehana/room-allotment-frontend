@@ -45,6 +45,9 @@ import dayjs from "dayjs";
 import { TiCancel } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";
 import { GrFormView } from "react-icons/gr";
+import ViewRemarkModal from "./ViewRemarkModal";
+import { useGetRemark } from "../../../hooks/hallBookingQueries";
+import CancelModal from "./CancelModal";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -91,13 +94,42 @@ const BookingHistoryTableWrapper = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedVisitorCode, setSelectedVisitorCode] = useState(null);
   const [selectedVPassNo, setSelectedVPassNo] = useState(null);
+  const [remark, setRemark] = useState(null);
 
   // Hooks
   const toast = useToast();
   const navigate = useNavigate();
 
+  //Disclosures
+  const viewRemarkDisclosure = useDisclosure();
+  const cancelDisclosure = useDisclosure();
+
   // Queries
   const queryClient = useQueryClient();
+
+  const getRemark = useGetRemark(
+      (response) => {
+        console.log("SUCCESS", response);
+        setRemark(response?.data?.remark);
+        //onClose();
+        viewRemarkDisclosure.onOpen();
+        //onSuccess(); 
+        return response;
+      },
+      (error) => {
+        console.log("ERROR", error);
+        toast({
+          isClosable: true,
+          duration: 3000,
+          position: "top-right",
+          status: "error",
+          title: "Error",
+          description:
+            error?.response?.data?.detail || "Error",
+        });
+        return error;
+      },
+    );
 
   if (query.isError) {
     return (
@@ -180,8 +212,19 @@ const BookingHistoryTableWrapper = ({
     );
   }
 
+  //Handlers
+  const getRemarkHandler = (row) => {
+  console.log("form data:", row);
+  getRemark.mutate(row);
+};
+
   return (
     <Stack spacing={4}>
+      <ViewRemarkModal
+        isOpen={viewRemarkDisclosure.isOpen}
+        onClose={viewRemarkDisclosure.onClose}
+        data={remark}
+      />
       {selectedVisitorCode && (
         <VisitorPassModal
           visitorCode={selectedVisitorCode}
@@ -203,6 +246,11 @@ const BookingHistoryTableWrapper = ({
           }}
         />
       )}
+      <CancelModal
+        isOpen={cancelDisclosure.isOpen}
+        onClose={cancelDisclosure.onClose}
+        data={rowState}
+      />
       {/* Table */}
       <TableContainer>
         <Table>
@@ -303,11 +351,10 @@ const BookingHistoryTableWrapper = ({
                         //lineHeight="1"
                         size="xs"
                         rightIcon={<TiCancel />}
-                        // onClick={() => {
-                        //   setRowState(row);
-
-                        //   deleteDisclosure.onOpen();
-                        // }}
+                        onClick={() => {
+                            setRowState(row);
+                            cancelDisclosure.onOpen();
+                          }}
                       >
                         Cancel
                       </Button>
@@ -319,13 +366,28 @@ const BookingHistoryTableWrapper = ({
                         //lineHeight="1"
                         size="xs"
                         rightIcon={<GrFormView />}
-                        // onClick={() => {
-                        //   setRowState(row);
-
-                        //   deleteDisclosure.onOpen();
-                        // }}
+                        onClick={() => {
+                           setRowState(row);
+                           getRemarkHandler(row);
+                         }}
                       >
                         View Remark
+                      </Button>
+                      )}
+                      {(row?.appStatus === 3 )&& (<Button
+                        variant="brand"
+                        colorScheme="brand"
+                        minW="auto"
+                        //lineHeight="1"
+                        size="xs"
+                        rightIcon={<FaEdit />}
+                        onClick={() => {
+                           setRowState(row);
+                           //getRemarkHandler();
+                           //viewRemarkDisclosure.onOpen();
+                         }}
+                      >
+                        Edit
                       </Button>
                       )}
                     </VStack>

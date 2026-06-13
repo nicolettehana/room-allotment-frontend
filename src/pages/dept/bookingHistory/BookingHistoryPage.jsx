@@ -36,6 +36,7 @@ import DateFilter from "../../../components/filter/DateFilter";
 import dayjs from "dayjs";
 import { useFetchUsersProfile } from "../../../hooks/userQueries";
 import { useFetchHistory } from "../../../hooks/hallBookingQueries";
+import StatusFilter from "../../../components/filter/StatusFilter";
 
 const BookingHistoryPage = () => {
   // States
@@ -45,6 +46,7 @@ const BookingHistoryPage = () => {
   const [withPhoto, setWithPhoto] = useState(0);
   const [officeCode, setOfficeCode] = useState("");
   const [format, setFormat] = useState("PDF");
+  const [status, setStatus] = useState("0");
   const [startDate, setStartDate] = useState(
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
@@ -67,6 +69,7 @@ const BookingHistoryPage = () => {
     pageSize,
     startDate,
     endDate,
+    status,
   );
 
   //Disclosures
@@ -85,23 +88,6 @@ const BookingHistoryPage = () => {
         withPhoto: withPhoto,
       },
       {
-        // onSuccess: (response) => {
-        //   const url = window.URL.createObjectURL(new Blob([response]));
-        //   const mimeType =
-        //     exportFormat === "PDF"
-        //       ? "application/pdf"
-        //       : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-
-        //   const blob = new Blob([response], { type: mimeType });
-
-        //   const link = document.createElement("a");
-        //   link.href = url;
-        //   link.download = `Visitors_${startDate}-${endDate}.${extension}`;
-        //   link.click();
-        //   link.remove();
-
-        //   onClose();
-        // },
         onSuccess: (response) => {
           console.log("Seuccess");
           const mimeType =
@@ -135,15 +121,23 @@ const BookingHistoryPage = () => {
             <Stack spacing={4}>
               {/* Filter */}
               <HStack justifyContent="space-between" spacing={2}>
-                <VStack spacing={7}>
-                  <DateFilter
-                    fromDate={startDate}
-                    setFromDate={setStartDate}
-                    toDate={endDate}
-                    setToDate={setEndDate}
+                <HStack>
+                  <VStack spacing={7}>
+                    <DateFilter
+                      fromDate={startDate}
+                      setFromDate={setStartDate}
+                      toDate={endDate}
+                      setToDate={setEndDate}
+                      setPageNumber={setPageNumber}
+                    />
+                  </VStack>
+
+                  <StatusFilter
                     setPageNumber={setPageNumber}
+                    status={status}
+                    setStatus={setStatus}
                   />
-                </VStack>
+                </HStack>
 
                 <HStack>
                   <Menu>
@@ -189,10 +183,6 @@ const BookingHistoryPage = () => {
                       >
                         Excel
                       </MenuItem>
-                      {/* <MenuItem onClick={() => handleExportVisitors("Excel")}>
-                        Excel
-                      </MenuItem> */}
-                      {/* <MenuItem onClick={() => handleExportVisitors("PDF")}> */}
                       <MenuItem
                         onClick={() => {
                           setFormat("PDF");
@@ -203,15 +193,6 @@ const BookingHistoryPage = () => {
                       </MenuItem>
                     </MenuList>
                   </Menu>
-                  {/* <Button
-                    variant="brand"
-                    leftIcon={<FaFileExport />}
-                    onClick={() => {
-                      handleExport();
-                    }}
-                  >
-                    Export to Excel
-                  </Button> */}
                 </HStack>
               </HStack>
 

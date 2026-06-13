@@ -36,6 +36,7 @@ import DateFilter from "../../../components/filter/DateFilter";
 import dayjs from "dayjs";
 import { useFetchUsersProfile } from "../../../hooks/userQueries";
 import { useFetchHistory } from "../../../hooks/hallBookingQueries";
+import StatusFilter from "../../../components/filter/StatusFilter";
 
 const AllBookingsPage = () => {
   // States
@@ -45,6 +46,7 @@ const AllBookingsPage = () => {
   const [withPhoto, setWithPhoto] = useState(0);
   const [officeCode, setOfficeCode] = useState("");
   const [format, setFormat] = useState("PDF");
+  const [status, setStatus] = useState("0");
   const [startDate, setStartDate] = useState(
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
@@ -67,6 +69,7 @@ const AllBookingsPage = () => {
     pageSize,
     startDate,
     endDate,
+    status
   );
 
   //Disclosures
@@ -135,6 +138,7 @@ const AllBookingsPage = () => {
             <Stack spacing={4}>
               {/* Filter */}
               <HStack justifyContent="space-between" spacing={2}>
+                <HStack>
                 <VStack spacing={7}>
                   <DateFilter
                     fromDate={startDate}
@@ -144,6 +148,12 @@ const AllBookingsPage = () => {
                     setPageNumber={setPageNumber}
                   />
                 </VStack>
+                <StatusFilter
+                    setPageNumber={setPageNumber}
+                    status={status}
+                    setStatus={setStatus}
+                  />
+                  </HStack>
 
                 <HStack>
                   <Menu>
