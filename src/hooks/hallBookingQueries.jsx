@@ -136,17 +136,17 @@ export const useGetRemark = (onSuccess, onError) => {
  * GET: Fetch Hall Allotments
  * ----------------------------
  */
-const fetchHallAllotments = (axiosClient, date) => {
+const fetchHallAllotments = (axiosClient, date, officeCode) => {
   return axiosClient.get(
-    `/booking/hall-allotments?date=${date}`,
+    `/booking/hall-allotments?date=${date}&officeCode=${officeCode}`,
   );
 };
 
-export const useFetchHallAllotments = (date) => {
+export const useFetchHallAllotments = (date, officeCode) => {
   const { axiosClient } = useAuthContext();
 
   return useQuery({
-    queryKey: ["hall-allotments", date],
-    queryFn: () => fetchHallAllotments(axiosClient, date),
+    queryKey: ["hall-allotments", date, officeCode],
+    queryFn: () => fetchHallAllotments(axiosClient, date, officeCode),
   });
 };

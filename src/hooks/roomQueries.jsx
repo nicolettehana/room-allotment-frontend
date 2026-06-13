@@ -16,7 +16,7 @@ export const useFetchHalls = (officeCode) => {
   return useQuery({
     queryKey: ["fetch-halls", officeCode],
     queryFn: () => fetchHalls(axiosClient, officeCode),
-    enabled: !!officeCode,
+    //enabled: !!officeCode,
     retry: 0,
   });
 };

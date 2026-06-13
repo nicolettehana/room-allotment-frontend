@@ -47,51 +47,6 @@ import TimelineScheduler from "../../components/charts/TimelineScheduler";
 import { useFetchHalls } from "../../hooks/roomQueries";
 import { useFetchHallAllotments } from "../../hooks/hallBookingQueries";
 
-const halls = [
-  {
-    id: "hall1",
-    name: "Main Hall",
-  },
-  {
-    id: "hall2",
-    name: "Training Room",
-  },
-  {
-    id: "hall3",
-    name: "Conference Room",
-  },
-];
-
-const meetings = [
-  {
-    id: 1,
-    hallId: "hall1",
-    department: "HR",
-    purpose: "Monthly HR Review",
-    start: "09:00",
-    end: "11:00",
-    color: "#3182CE",
-  },
-  {
-    id: 2,
-    hallId: "hall2",
-    department: "Finance",
-    purpose: "Budget Planning",
-    start: "10:30",
-    end: "12:00",
-    color: "#38A169",
-  },
-  {
-    id: 3,
-    hallId: "hall1",
-    department: "IT",
-    purpose: "Server Upgrade Discussion",
-    start: "14:00",
-    end: "16:30",
-    color: "#805AD5",
-  },
-];
-
 const DashboardPage = () => {
   const currentDate = new Date();
 
@@ -102,7 +57,7 @@ const DashboardPage = () => {
   const [withPhoto, setWithPhoto] = useState(0);
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
   const [year, setYear] = useState(currentDate.getFullYear());
-  const [officeCode, setOfficeCode] = useState("");
+  const [officeCode, setOfficeCode] = useState("-1");
   const [purpose, setPurpose] = useState("All");
   const [format, setFormat] = useState("PDF");
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
@@ -123,7 +78,7 @@ const DashboardPage = () => {
   const profileQuery = useFetchUsersProfile();
   const pendingBookingsQuery = useFetchPendingBookings(0, 10);
   const hallsQuery = useFetchHalls(officeCode);
-  const hallAllotmentQuery = useFetchHallAllotments(selectedDate);
+  const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
 
   const exportVisitorsMutation = useExportVisitors();
 
@@ -206,7 +161,7 @@ const DashboardPage = () => {
                     </Heading>
                   </VStack>
                   <OfficeFilter
-                    pageNumber={pageNumber}
+                    setPageNumber={setPageNumber}
                     query={officesQuery}
                     officeCode={officeCode}
                     setOfficeCode={setOfficeCode}
@@ -214,7 +169,7 @@ const DashboardPage = () => {
                 </HStack>
               </HStack>
 
-              <TimelineScheduler halls={hallsQuery?.data?.data} meetings={meetings} />
+              <TimelineScheduler halls={hallsQuery?.data?.data} meetings={hallAllotmentQuery?.data?.data} />
             </Stack>
           </Container>
         </Section>

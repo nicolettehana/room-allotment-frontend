@@ -18,7 +18,9 @@ const OfficeFilter = ({
   query,
 }) => {
   
-  const office = query?.data?.data?.find(    
+  const office = officeCode === "-1"
+    ? "All"
+    : query?.data?.data?.find(    
     (row) => row?.officeCode === Number(officeCode)
   )?.officeName;
 
@@ -45,7 +47,7 @@ const OfficeFilter = ({
             setPageNumber(0);
           }}
         >
-          {/* <MenuItemOption value="">All</MenuItemOption> */}
+          <MenuItemOption value="-1">All</MenuItemOption>
           {query?.data?.data?.map(
             (row) =>
               

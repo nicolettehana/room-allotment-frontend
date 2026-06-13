@@ -6,8 +6,8 @@ import {
   VStack,
 } from "@chakra-ui/react";
 
-const START_HOUR = 9;
-const END_HOUR = 20;
+const START_HOUR = 10;
+const END_HOUR = 18;
 
 const TOTAL_MINUTES = (END_HOUR - START_HOUR) * 60;
 
@@ -64,13 +64,13 @@ export default function TimelineScheduler({
       {/* Rows */}
       <VStack spacing={0} align="stretch" minW="1400px">
         {halls?.map((hall) => {
-          const hallMeetings = meetings.filter(
-            (m) => m.hallId === hall.id
+          const hallMeetings = meetings?.filter(
+            (m) => m?.hallId === hall?.id
           );
 
           return (
             <Flex
-              key={hall.id}
+              key={hall?.id}
               h="90px"
               borderTop="1px solid"
               borderColor="gray.200"
@@ -83,7 +83,7 @@ export default function TimelineScheduler({
                 borderColor="gray.200"
                 fontWeight="500"
               >
-                {hall.name}
+                {hall?.name}
               </Box>
 
               {/* Timeline */}
@@ -112,10 +112,10 @@ export default function TimelineScheduler({
                 {/* Events */}
                 {hallMeetings?.map((meeting) => {
                   const start =
-                    timeToMinutes(meeting.start);
+                    timeToMinutes(meeting?.start);
 
                   const end =
-                    timeToMinutes(meeting.end);
+                    timeToMinutes(meeting?.end);
 
                   const left =
                     (start / TOTAL_MINUTES) * 100;
@@ -127,25 +127,25 @@ export default function TimelineScheduler({
 
                   return (
                     <Tooltip
-                      key={meeting.id}
+                      key={meeting?.id}
                       hasArrow
                       placement="top"
                       label={
                         <Box>
                           <Text fontWeight="bold">
-                            {meeting.department}
+                            {meeting?.department}
                           </Text>
 
                           <Text>
                             Purpose:
                             {" "}
-                            {meeting.purpose}
+                            {meeting?.purpose}
                           </Text>
 
                           <Text>
-                            {meeting.start}
+                            {meeting?.start}
                             {" - "}
-                            {meeting.end}
+                            {meeting?.end}
                           </Text>
                         </Box>
                       }
@@ -156,7 +156,7 @@ export default function TimelineScheduler({
                         left={`${left}%`}
                         width={`${width}%`}
                         h="60px"
-                        bg={meeting.color}
+                        bg={meeting?.color}
                         color="white"
                         borderRadius="md"
                         px={3}
@@ -168,13 +168,13 @@ export default function TimelineScheduler({
                           fontWeight="bold"
                           fontSize="sm"
                         >
-                          {meeting.department}
+                          {meeting?.department}
                         </Text>
 
                         <Text fontSize="xs">
-                          {meeting.start}
+                          {meeting?.start}
                           {" - "}
-                          {meeting.end}
+                          {meeting?.end}
                         </Text>
                       </Box>
                     </Tooltip>

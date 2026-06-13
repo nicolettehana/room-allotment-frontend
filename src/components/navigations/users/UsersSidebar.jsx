@@ -21,7 +21,7 @@ const UsersSidebar = ({ profile }) => {
 
   return (
     <Stack
-      display={{ base: "none", lg: "block" }}
+      display={{ base: "none", md:"none", lg: "block" }}
       w={256}
       borderRight="1px"
       borderColor="border"
