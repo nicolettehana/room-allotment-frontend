@@ -16,13 +16,14 @@ import {
   Heading,
   Box,
   Text,
+  FormControl,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
 import {
   useExportVisitors,
-  useFetchPurposeStats,
 } from "../../hooks/visitorQueries";
-import { useFetchVisitors } from "../../hooks/visitorQueries";
 import VisitorsTableWrapper from "./VisitorsTableWrapper";
 import SearchInput from "../../components/core/SearchInput";
 import { useDebounce } from "use-debounce";
@@ -35,7 +36,6 @@ import dayjs from "dayjs";
 import { useFetchUsersProfile } from "../../hooks/userQueries";
 import { useFetchOffices } from "../../hooks/officeQueries";
 import OfficeFilter from "../../components/filter/OfficeFilter";
-import { useFetchStats } from "../../hooks/visitorQueries";
 import YearMonthFilter from "../../components/filter/YearMonthFIlter";
 import PurposeFilter from "../../components/filter/PurposeFilter";
 import VisitorPieChart from "../../components/charts/VisitorPieChart";
@@ -43,6 +43,54 @@ import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
 import StatCard2 from "../../components/core/theme/StatCard2";
 import { Link } from "react-router-dom";
 import { useFetchPendingBookings } from "../../hooks/hallBookingQueries";
+import TimelineScheduler from "../../components/charts/TimelineScheduler";
+import { useFetchHalls } from "../../hooks/roomQueries";
+import { useFetchHallAllotments } from "../../hooks/hallBookingQueries";
+
+const halls = [
+  {
+    id: "hall1",
+    name: "Main Hall",
+  },
+  {
+    id: "hall2",
+    name: "Training Room",
+  },
+  {
+    id: "hall3",
+    name: "Conference Room",
+  },
+];
+
+const meetings = [
+  {
+    id: 1,
+    hallId: "hall1",
+    department: "HR",
+    purpose: "Monthly HR Review",
+    start: "09:00",
+    end: "11:00",
+    color: "#3182CE",
+  },
+  {
+    id: 2,
+    hallId: "hall2",
+    department: "Finance",
+    purpose: "Budget Planning",
+    start: "10:30",
+    end: "12:00",
+    color: "#38A169",
+  },
+  {
+    id: 3,
+    hallId: "hall1",
+    department: "IT",
+    purpose: "Server Upgrade Discussion",
+    start: "14:00",
+    end: "16:30",
+    color: "#805AD5",
+  },
+];
 
 const DashboardPage = () => {
   const currentDate = new Date();
@@ -57,6 +105,7 @@ const DashboardPage = () => {
   const [officeCode, setOfficeCode] = useState("");
   const [purpose, setPurpose] = useState("All");
   const [format, setFormat] = useState("PDF");
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
   const [startDate, setStartDate] = useState(
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
@@ -65,14 +114,6 @@ const DashboardPage = () => {
   );
   const { role } = useAuth();
 
-  const allPurposes = [
-    "To meet Minister",
-    "To meet Chief Secretary",
-    "To attend meeting/function",
-    "To meet officers",
-    "To visit Department",
-  ];
-
   // Hooks
   const [searchValue] = useDebounce(searchText, 300);
   const navigate = useNavigate();
@@ -80,18 +121,10 @@ const DashboardPage = () => {
   // Queries
   const officesQuery = useFetchOffices();
   const profileQuery = useFetchUsersProfile();
-  const statsQuery = useFetchStats(month, year, purpose, officeCode);
-  const purposeStatsQuery = useFetchPurposeStats(month, year, officeCode);
   const pendingBookingsQuery = useFetchPendingBookings(0, 10);
+  const hallsQuery = useFetchHalls(officeCode);
+  const hallAllotmentQuery = useFetchHallAllotments(selectedDate);
 
-  const visitorsQuery = useFetchVisitors(
-    searchValue,
-    pageNumber,
-    pageSize,
-    startDate,
-    endDate,
-    officeCode,
-  );
   const exportVisitorsMutation = useExportVisitors();
 
   //Disclosures
@@ -132,16 +165,6 @@ const DashboardPage = () => {
     );
   };
 
-  const apiData = purposeStatsQuery?.data?.data || [];
-
-  const pieData = allPurposes.map((purpose) => {
-    const found = apiData.find((item) => item.purpose === purpose);
-
-    return {
-      name: purpose,
-      value: found ? found.totalVisitors : 0,
-    };
-  });
 
   useEffect(() => {
     if (
@@ -164,19 +187,20 @@ const DashboardPage = () => {
               categoryCode="EVENT"
               onClick={() => navigate("/asad/inbox")}
             />
-            <Stack spacing={4} mt={4}>
+            <Stack spacing={4} mt={8}>
               {/* Filter */}
-
               <HStack justifyContent="space-between" spacing={2}>
                 <HStack>
                   <VStack>
-                    <YearMonthFilter
-                      year={year}
-                      setYear={setYear}
-                      month={month}
-                      setMonth={setMonth}
-                      setPageNumber={setPageNumber}
-                    />
+                    <FormControl>
+                      {/* <FormLabel htmlFor="date">Date</FormLabel> */}
+                      <Input
+                        type="date"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                      />
+                    </FormControl>
+
                     <Heading size="sm">
                       {profileQuery?.data?.data?.office}
                     </Heading>
@@ -187,44 +211,10 @@ const DashboardPage = () => {
                     officeCode={officeCode}
                     setOfficeCode={setOfficeCode}
                   ></OfficeFilter>
-                  <PurposeFilter
-                    purpose={purpose}
-                    setPurpose={setPurpose}
-                    setPageNumber={setPageNumber}
-                  />
                 </HStack>
               </HStack>
-              <Text fontWeight="bold">
-                No. of Visitors: {statsQuery?.data?.data?.noOfVisitors}
-              </Text>
-              {/* <Text fontWeight="bold">
-                Average visitors per day: {statsQuery?.data?.data?.avgVisitors}
-              </Text> */}
-              <Box
-                flex="3"
-                bg="gray.50"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-                border="1px solid"
-                borderColor="gray.200"
-              >
-                <VisitorsBarChart details={statsQuery?.data?.data?.details} />
-              </Box>
-              <HStack w="100%" spacing={4}>
-                <Box
-                  flex="1"
-                  bg="gray.50"
-                  p={4}
-                  h="400px"
-                  borderRadius="lg"
-                  boxShadow="md"
-                  border="1px solid"
-                  borderColor="gray.200"
-                >
-                  <VisitorPieChart data={pieData} />
-                </Box>
-              </HStack>
+
+              <TimelineScheduler halls={hallsQuery?.data?.data} meetings={meetings} />
             </Stack>
           </Container>
         </Section>

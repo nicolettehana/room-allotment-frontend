@@ -130,3 +130,23 @@ export const useGetRemark = (onSuccess, onError) => {
     onError,
   });
 };
+
+/**
+ * ----------------------------
+ * GET: Fetch Hall Allotments
+ * ----------------------------
+ */
+const fetchHallAllotments = (axiosClient, date) => {
+  return axiosClient.get(
+    `/booking/hall-allotments?date=${date}`,
+  );
+};
+
+export const useFetchHallAllotments = (date) => {
+  const { axiosClient } = useAuthContext();
+
+  return useQuery({
+    queryKey: ["hall-allotments", date],
+    queryFn: () => fetchHallAllotments(axiosClient, date),
+  });
+};

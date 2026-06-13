@@ -51,6 +51,7 @@ import { CgProfile } from "react-icons/cg";
 import dayjs from "dayjs";
 import { MdNavigateNext } from "react-icons/md";
 import TakeActionModal from "./TakeActionModal";
+import { AiOutlineFileSearch } from "react-icons/ai";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -151,13 +152,13 @@ const InboxTableWrapper = ({
             rounded="full"
             p={4}
           >
-            <MdOutlineSearch size={48} />
+            <AiOutlineFileSearch size={48} />
           </Box>
 
           <VStack>
             <Heading size="md">No data</Heading>
             <Text color="body" textAlign="center">
-              No data related to "{searchText}"
+              No pending requests
             </Text>
           </VStack>
         </VStack>
@@ -280,7 +281,8 @@ const InboxTableWrapper = ({
                       fadeDuration={index}
                       fontSize="sm"
                     >
-                      {index + 1}
+                      {((pageNumber ) * (query?.data?.data?.size || 0))+ index + 1}
+                      {/* {index + 1} */}
                       {/* {elementCounter(index, query)} */}
                     </SkeletonText>
                   </Td>
@@ -295,7 +297,7 @@ const InboxTableWrapper = ({
                   </Td>
                   <Td>
                     <Text fontSize="sm">
-                      {new Date(row.meetingDate)
+                      {new Date(row?.meetingDate)
                         .toLocaleDateString("en-GB")
                         .replace(/\//g, "-")}
                       <br />

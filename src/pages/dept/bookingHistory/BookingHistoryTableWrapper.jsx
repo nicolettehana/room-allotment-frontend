@@ -283,7 +283,8 @@ const BookingHistoryTableWrapper = ({
                       fadeDuration={index}
                       fontSize="sm"
                     >
-                      {index + 1}
+                      {((pageNumber ) * (query?.data?.data?.size || 0))+ index + 1}
+                      {/* {index + 1} */}
                       {/* {elementCounter(index, query)} */}
                     </SkeletonText>
                   </Td>
@@ -295,7 +296,9 @@ const BookingHistoryTableWrapper = ({
                   </Td>
                   <Td>
                     <Text fontSize="sm">
-                      {row?.meetingDate}
+                      {new Date(row?.meetingDate)
+                        .toLocaleDateString("en-GB")
+                        .replace(/\//g, "-")}
                       <br />
                       {new Date(
                         `1970-01-01T${row?.startTime}`,
