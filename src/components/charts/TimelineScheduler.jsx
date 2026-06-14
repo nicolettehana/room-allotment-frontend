@@ -9,12 +9,22 @@ import {
 const START_HOUR = 10;
 const END_HOUR = 18;
 
-const TOTAL_MINUTES = (END_HOUR - START_HOUR) * 60;
+const TOTAL_MINUTES = (END_HOUR - START_HOUR+1) * 60;
 
 const timeToMinutes = (time) => {
   const [h, m] = time.split(":")?.map(Number);
   return (h - START_HOUR) * 60 + m;
 };
+
+const EVENT_COLORS = [
+  "blue.700",
+  "green.700",
+  "purple.700",
+  "orange.700",
+  "pink.700",
+];
+
+let colorIndex = 0;
 
 export default function TimelineScheduler({
   halls,
@@ -41,7 +51,7 @@ export default function TimelineScheduler({
 
         <Flex flex={1}>
           {Array.from(
-            { length: END_HOUR - START_HOUR + 1 },
+            { length: END_HOUR - START_HOUR +1},
             (_, i) => START_HOUR + i
           )?.map((hour) => (
             <Box
@@ -110,7 +120,11 @@ export default function TimelineScheduler({
                 </Flex>
 
                 {/* Events */}
-                {hallMeetings?.map((meeting) => {
+                {hallMeetings?.map((meeting, index) => {
+                  const color =
+    EVENT_COLORS[colorIndex % EVENT_COLORS.length];
+
+  colorIndex++;
                   const start =
                     timeToMinutes(meeting?.start);
 
@@ -156,7 +170,9 @@ export default function TimelineScheduler({
                         left={`${left}%`}
                         width={`${width}%`}
                         h="60px"
-                        bg={meeting?.color}
+                        bg={color}
+                        //bg={EVENT_COLORS[index % EVENT_COLORS.length]}
+                        //bg={meeting?.color}
                         color="white"
                         borderRadius="md"
                         px={3}
