@@ -26,6 +26,7 @@ import BookingHistoryPage from "./pages/dept/bookingHistory/BookingHistoryPage";
 import CreateBookingPage from "./pages/dept/CreateBookingPage";
 import InboxPage from "./pages/asad/inbox/InboxPage";
 import AllBookingsPage from "./pages/asad/allBookings/AllBookingsPage";
+import HallsPage from "./pages/asad/halls/HallsPage";
 
 const App = () => {
   return (
@@ -61,6 +62,7 @@ const App = () => {
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="inbox" element={<InboxPage />} />
           <Route path="history" element={<AllBookingsPage />} />
+          <Route path="halls" element={<HallsPage />} />
 
           {/* Profile */}
           <Route path="profile" element={<UserProfilePage />} />

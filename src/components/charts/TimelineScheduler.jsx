@@ -93,7 +93,7 @@ export default function TimelineScheduler({
                 borderColor="gray.200"
                 fontWeight="500"
               >
-                {hall?.name}
+                {hall?.name}, {hall?.office}
               </Box>
 
               {/* Timeline */}
