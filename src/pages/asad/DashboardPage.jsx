@@ -175,7 +175,7 @@ const DashboardPage = () => {
                   ></OfficeFilter>
                 </HStack>
                 <Box position="absolute" left="50%">
-                  <Text textAlign="center" fontWeight="bold" fontSize={25}>
+                  <Text textAlign="center" fontWeight="bold" fontSize={25} color="brown.800">
                     Meetings - {formatDate(selectedDate)}
                   </Text>
                 </Box>

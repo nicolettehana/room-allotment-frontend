@@ -11,7 +11,7 @@ const StatCard2 = ({ title, value, categoryCode, maxW = "250px", onClick }) => {
     <>
       <Card
         bg={bg}
-        color="brown.800"
+        color="brown.950"
         shadow="md"
         border="1px solid"
         borderColor={textColor}

@@ -36,15 +36,17 @@ export default function TimelineScheduler({ halls, meetings }) {
       border="1px solid"
       borderColor="gray.200"
       borderRadius="md"
+      boxShadow="xl"
     >
       {/* Header */}
-      <Flex bg="gray.50" minW="1400px">
+      <Flex bg="gray.50" color="brown.800" minW="1400px">
         <Box
           w="220px"
           p={4}
           borderRight="1px solid"
           borderColor="gray.200"
           fontWeight="bold"
+          
         >
           Hall
         </Box>
@@ -87,6 +89,8 @@ export default function TimelineScheduler({ halls, meetings }) {
                 p={4}
                 borderRight="1px solid"
                 borderColor="gray.200"
+                bg="gray.50"
+                color="brown.800"
                 fontWeight="500"
               >
                 {hall?.name}, {hall?.office}
@@ -145,7 +149,7 @@ export default function TimelineScheduler({ halls, meetings }) {
                         top="12px"
                         left={`${left}%`}
                         width={`${width}%`}
-                        h="60px"
+                        //h="60px"
                         bg={color}
                         //bg={EVENT_COLORS[index % EVENT_COLORS.length]}
                         //bg={meeting?.color}

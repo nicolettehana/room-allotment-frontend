@@ -16,14 +16,13 @@ import {
   Heading,
   Box,
   Text,
+  FormControl,
+  FormLabel,
+  Input,
 } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
-import {
-  useExportVisitors,
-  useFetchPurposeStats,
-} from "../../hooks/visitorQueries";
-import { useFetchVisitors } from "../../hooks/visitorQueries";
-import VisitorsTableWrapper from "../asad/VisitorsTableWrapper";
+import { useExportVisitors } from "../../hooks/visitorQueries";
+import VisitorsTableWrapper from "./VisitorsTableWrapper";
 import SearchInput from "../../components/core/SearchInput";
 import { useDebounce } from "use-debounce";
 import { PageSizing } from "../../components/core/Table";
@@ -35,14 +34,26 @@ import dayjs from "dayjs";
 import { useFetchUsersProfile } from "../../hooks/userQueries";
 import { useFetchOffices } from "../../hooks/officeQueries";
 import OfficeFilter from "../../components/filter/OfficeFilter";
-import { useFetchStats } from "../../hooks/visitorQueries";
 import YearMonthFilter from "../../components/filter/YearMonthFIlter";
 import PurposeFilter from "../../components/filter/PurposeFilter";
 import VisitorPieChart from "../../components/charts/VisitorPieChart";
 import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
-import { MdOutlineAddCircleOutline } from "react-icons/md";
+import StatCard2 from "../../components/core/theme/StatCard2";
+import { Link } from "react-router-dom";
+import { useFetchPendingBookings } from "../../hooks/hallBookingQueries";
+import TimelineScheduler from "../../components/charts/TimelineScheduler";
+import { useFetchHalls } from "../../hooks/roomQueries";
+import { useFetchHallAllotments } from "../../hooks/hallBookingQueries";
 
-const DeptDashboardPage = () => {
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
+const DashboardPage = () => {
   const currentDate = new Date();
 
   // States
@@ -52,9 +63,12 @@ const DeptDashboardPage = () => {
   const [withPhoto, setWithPhoto] = useState(0);
   const [month, setMonth] = useState(currentDate.getMonth() + 1);
   const [year, setYear] = useState(currentDate.getFullYear());
-  const [officeCode, setOfficeCode] = useState("");
+  const [officeCode, setOfficeCode] = useState("-1");
   const [purpose, setPurpose] = useState("All");
   const [format, setFormat] = useState("PDF");
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [startDate, setStartDate] = useState(
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
@@ -63,14 +77,6 @@ const DeptDashboardPage = () => {
   );
   const { role } = useAuth();
 
-  const allPurposes = [
-    "To meet Minister",
-    "To meet Chief Secretary",
-    "To attend meeting/function",
-    "To meet officers",
-    "To visit Department",
-  ];
-
   // Hooks
   const [searchValue] = useDebounce(searchText, 300);
   const navigate = useNavigate();
@@ -78,17 +84,9 @@ const DeptDashboardPage = () => {
   // Queries
   const officesQuery = useFetchOffices();
   const profileQuery = useFetchUsersProfile();
-  const statsQuery = useFetchStats(month, year, purpose, officeCode);
-  const purposeStatsQuery = useFetchPurposeStats(month, year, officeCode);
+  const hallsQuery = useFetchHalls(officeCode);
+  const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
 
-  const visitorsQuery = useFetchVisitors(
-    searchValue,
-    pageNumber,
-    pageSize,
-    startDate,
-    endDate,
-    officeCode,
-  );
   const exportVisitorsMutation = useExportVisitors();
 
   //Disclosures
@@ -129,17 +127,6 @@ const DeptDashboardPage = () => {
     );
   };
 
-  const apiData = purposeStatsQuery?.data?.data || [];
-
-  const pieData = allPurposes.map((purpose) => {
-    const found = apiData.find((item) => item.purpose === purpose);
-
-    return {
-      name: purpose,
-      value: found ? found.totalVisitors : 0,
-    };
-  });
-
   useEffect(() => {
     if (
       officesQuery?.data?.data?.length > 0 &&
@@ -155,78 +142,44 @@ const DeptDashboardPage = () => {
       <Main>
         <Section>
           <Container minW="full">
-            <Stack spacing={4}>
+            <Text>Upcoming Meetings</Text>
+            <Text>Rejected/Reschedule Bookings</Text>
+            <Stack spacing={4} mt={8}>
               {/* Filter */}
-
               <HStack justifyContent="space-between" spacing={2}>
                 <HStack>
                   <VStack>
-                    <YearMonthFilter
-                      year={year}
-                      setYear={setYear}
-                      month={month}
-                      setMonth={setMonth}
-                      setPageNumber={setPageNumber}
-                    />
+                    <FormControl>
+                      {/* <FormLabel htmlFor="date">Date</FormLabel> */}
+                      <Input
+                        type="date"
+                        value={selectedDate}
+                        onChange={(e) => setSelectedDate(e.target.value)}
+                      />
+                    </FormControl>
+
                     <Heading size="sm">
                       {profileQuery?.data?.data?.office}
                     </Heading>
                   </VStack>
                   <OfficeFilter
-                    pageNumber={pageNumber}
+                    setPageNumber={setPageNumber}
                     query={officesQuery}
                     officeCode={officeCode}
                     setOfficeCode={setOfficeCode}
                   ></OfficeFilter>
-                  <PurposeFilter
-                    purpose={purpose}
-                    setPurpose={setPurpose}
-                    setPageNumber={setPageNumber}
-                  />
                 </HStack>
-                <HStack w="100%" justify="flex-end" p={6}>
-                  {/* {hasPermission(role, "canAddCategory") && ( */}
-                  <Button
-                    variant="brand"
-                    leftIcon={<MdOutlineAddCircleOutline />}
-                    onClick={() => navigate("/dept/create-booking")}
-                  >
-                    New Booking
-                  </Button>
-                  {/* )} */}
-                </HStack>
-              </HStack>
-              <Text fontWeight="bold">
-                No. of Visitors: {statsQuery?.data?.data?.noOfVisitors}
-              </Text>
-              {/* <Text fontWeight="bold">
-                Average visitors per day: {statsQuery?.data?.data?.avgVisitors}
-              </Text> */}
-              <Box
-                flex="3"
-                bg="gray.50"
-                p={4}
-                borderRadius="lg"
-                boxShadow="md"
-                border="1px solid"
-                borderColor="gray.200"
-              >
-                <VisitorsBarChart details={statsQuery?.data?.data?.details} />
-              </Box>
-              <HStack w="100%" spacing={4}>
-                <Box
-                  flex="1"
-                  bg="gray.50"
-                  p={4}
-                  h="400px"
-                  borderRadius="lg"
-                  boxShadow="md"
-                  border="1px solid"
-                  borderColor="gray.200"
-                >
-                  <VisitorPieChart data={pieData} />
+                <Box position="absolute" left="50%">
+                  <Text textAlign="center" fontWeight="bold" fontSize={25}>
+                    Meetings - {formatDate(selectedDate)}
+                  </Text>
                 </Box>
               </HStack>
+
+              <TimelineScheduler
+                halls={hallsQuery?.data?.data}
+                meetings={hallAllotmentQuery?.data?.data}
+              />
             </Stack>
           </Container>
         </Section>
@@ -235,4 +188,4 @@ const DeptDashboardPage = () => {
   );
 };
 
-export default DeptDashboardPage;
+export default DashboardPage;

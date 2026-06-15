@@ -4,12 +4,12 @@ const brand = defineStyle({
   fontWeight: "medium",
 
   _light: {
-    bg: "brown.400",
-    color: "brown.800",
+    bg: "brown.800",
+    color: "brown.50",
 
     _hover: {
-      bg: "brown.800",
-      color: "zinc.50",
+      bg: "brown.400",
+      color: "brown.700",
     },
 
     _active: {

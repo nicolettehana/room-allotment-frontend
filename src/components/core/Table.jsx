@@ -49,8 +49,8 @@ export const Thead = ({ children }) => {
   return (
     <Box
       as="thead"
-      bg="brown.300"
-      color="brown.200"
+      bg="brown.700"
+      color="brown.50"
       borderBottom="1px"
       borderColor="border"
     >
@@ -73,7 +73,7 @@ export const Tr = ({ children, ...others }) => {
       }}
       /* Hover highlight */
       _hover={{
-        bg: useColorModeValue("brown.100", "brown.700"),
+        bg: useColorModeValue("brown.100", "brown.200"),
       }}
       _last={{
         borderBottom: "0px",
@@ -93,7 +93,7 @@ export const Th = ({ children, isNumeric = false }) => {
       whiteSpace="nowrap"
       fontSize="sm"
       fontWeight="medium"
-      color="body"
+      //color="body"
       px={4}
       py={2}
     >
