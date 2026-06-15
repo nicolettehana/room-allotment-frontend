@@ -21,9 +21,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { Badge } from "@chakra-ui/react";
-import {
-  useExportVisitors,
-} from "../../hooks/visitorQueries";
+import { useExportVisitors } from "../../hooks/visitorQueries";
 import VisitorsTableWrapper from "./VisitorsTableWrapper";
 import SearchInput from "../../components/core/SearchInput";
 import { useDebounce } from "use-debounce";
@@ -47,6 +45,14 @@ import TimelineScheduler from "../../components/charts/TimelineScheduler";
 import { useFetchHalls } from "../../hooks/roomQueries";
 import { useFetchHallAllotments } from "../../hooks/hallBookingQueries";
 
+const formatDate = (dateString) => {
+  return new Date(dateString).toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+};
+
 const DashboardPage = () => {
   const currentDate = new Date();
 
@@ -60,7 +66,9 @@ const DashboardPage = () => {
   const [officeCode, setOfficeCode] = useState("-1");
   const [purpose, setPurpose] = useState("All");
   const [format, setFormat] = useState("PDF");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split("T")[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
   const [startDate, setStartDate] = useState(
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
@@ -120,7 +128,6 @@ const DashboardPage = () => {
     );
   };
 
-
   useEffect(() => {
     if (
       officesQuery?.data?.data?.length > 0 &&
@@ -167,9 +174,17 @@ const DashboardPage = () => {
                     setOfficeCode={setOfficeCode}
                   ></OfficeFilter>
                 </HStack>
+                <Box position="absolute" left="50%">
+                  <Text textAlign="center" fontWeight="bold" fontSize={25}>
+                    Meetings - {formatDate(selectedDate)}
+                  </Text>
+                </Box>
               </HStack>
 
-              <TimelineScheduler halls={hallsQuery?.data?.data} meetings={hallAllotmentQuery?.data?.data} />
+              <TimelineScheduler
+                halls={hallsQuery?.data?.data}
+                meetings={hallAllotmentQuery?.data?.data}
+              />
             </Stack>
           </Container>
         </Section>

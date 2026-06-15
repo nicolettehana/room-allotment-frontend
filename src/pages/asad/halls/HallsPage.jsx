@@ -39,10 +39,14 @@ import VisitorPieChart from "../../../components/charts/VisitorPieChart";
 import VisitorsBarChart from "../../../components/charts/VisitorsBarChart";
 import { Link } from "react-router-dom";
 import { useFetchPendingBookings } from "../../../hooks/hallBookingQueries";
-import { useFetchHalls } from "../../../hooks/roomQueries";
+import {
+  useFetchHalls,
+  useFetchHallsOfficeWise,
+} from "../../../hooks/roomQueries";
 import { useFetchHallAllotments } from "../../../hooks/hallBookingQueries";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 import CreateOfficeModal from "../../admin/offices/CreateOfficeModal";
+import CreateHallModal from "./CreateHallModal";
 import UpdateOfficeModal from "../../admin/offices/UpdateOfficeModal";
 
 const HallsPage = () => {
@@ -80,12 +84,14 @@ const HallsPage = () => {
   const pendingBookingsQuery = useFetchPendingBookings(0, 10);
   const hallsQuery = useFetchHalls(officeCode);
   const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
+  const hallsOfficeWiseQuery = useFetchHallsOfficeWise();
 
   //Disclosures
   const { isOpen, onOpen, onClose } = useDisclosure();
   // Disclosures
   const createOfficeDisclosure = useDisclosure();
   const updateOfficeDisclosure = useDisclosure();
+  const createHallDisclosure = useDisclosure();
 
   //Handlers
 
@@ -136,52 +142,67 @@ const HallsPage = () => {
       {/* Main */}
       <Main>
         <CreateOfficeModal
-        isOpen={createOfficeDisclosure.isOpen}
-        onClose={createOfficeDisclosure.onClose}
-      />
-      <UpdateOfficeModal
-        isOpen={updateOfficeDisclosure.isOpen}
-        onClose={updateOfficeDisclosure.onClose}
-        officeName={rowState?.officeName}
-        officeCode={rowState?.officeCode}
-      />
+          isOpen={createOfficeDisclosure.isOpen}
+          onClose={createOfficeDisclosure.onClose}
+        />
+        <CreateHallModal
+          isOpen={createHallDisclosure.isOpen}
+          onClose={createHallDisclosure.onClose}
+          officeQuery={officesQuery}
+        />
+        <UpdateOfficeModal
+          isOpen={updateOfficeDisclosure.isOpen}
+          onClose={updateOfficeDisclosure.onClose}
+          officeName={rowState?.officeName}
+          officeCode={rowState?.officeCode}
+        />
         <Section>
           <Container minW="full">
-            <Stack spacing={4} mt={8}>
+            <Stack spacing={0} mt={8}>
               {/* Filter */}
-              <HStack justifyContent="space-between" spacing={2}>
-                
-
+              <HStack justifyContent="space-between" spacing={0}>
                 <OfficeFilter
                   setPageNumber={setPageNumber}
                   query={officesQuery}
                   officeCode={officeCode}
                   setOfficeCode={setOfficeCode}
                 ></OfficeFilter>
-                <HStack w="100%" justify="flex-end">
-                  <Button
-                    variant="brand"
-                    leftIcon={<MdOutlineAddCircleOutline />}
-                    onClick={createOfficeDisclosure.onOpen}
-                  >
-                    Add Office
-                  </Button>
-
-                  <Button
-                    variant="brand"
-                    leftIcon={<MdOutlineAddCircleOutline />}
-                    //onClick={createOfficeDisclosure.onOpen}
-                  >
-                    Add Hall
-                  </Button>
-                </HStack>
               </HStack>
-              {/* Table */}
-              <HallsTableWrapper
-                query={hallsQuery}
-                pageNumber={pageNumber}
-                setPageNumber={setPageNumber}
-              />
+              <HStack w="100%" justify="flex-end">
+                <Button
+                  variant="brand"
+                  leftIcon={<MdOutlineAddCircleOutline />}
+                  onClick={createOfficeDisclosure.onOpen}
+                >
+                  Add Office
+                </Button>
+
+                <Button
+                  variant="brand"
+                  leftIcon={<MdOutlineAddCircleOutline />}
+                  onClick={createHallDisclosure.onOpen}
+                >
+                  Add Hall
+                </Button>
+              </HStack>
+              {(hallsOfficeWiseQuery.isPending
+                ? new Array(10).fill(null)
+                : hallsOfficeWiseQuery?.data?.data
+              )?.map((row, index) => {
+                return (
+                  <>
+                    <Text fontWeight="bold">
+                      {hallsOfficeWiseQuery?.data?.data[index]?.officeName}
+                    </Text>
+                    {/* Table */}
+                    <HallsTableWrapper
+                      query={hallsOfficeWiseQuery?.data?.data[index]?.rooms}
+                      pageNumber={pageNumber}
+                      setPageNumber={setPageNumber}
+                    />
+                  </>
+                );
+              })}
             </Stack>
           </Container>
         </Section>

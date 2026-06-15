@@ -20,3 +20,42 @@ export const useFetchHalls = (officeCode) => {
     retry: 0,
   });
 };
+
+/**
+ * ----------------------------
+ * GET: Hall List Office Wise
+ * ----------------------------
+ */
+const fetchHallsOfficeWise = (axiosClient) => {
+  return axiosClient.get(`/room/office-hall`);
+};
+
+export const useFetchHallsOfficeWise = () => {
+  const { axiosClient } = useAuthContext();
+
+  return useQuery({
+    queryKey: ["fetch-halls-office-wise"],
+    queryFn: () => fetchHallsOfficeWise(axiosClient),
+    enabled: !!axiosClient,
+    retry: 0,
+  });
+};
+
+/**
+ * ----------------------------
+ * POST: Create Hall
+ * ----------------------------
+ */
+const createHall = (axiosClient, data) => {
+  return axiosClient.post("/room/hall", data);
+};
+
+export const useCreateHall = (onSuccess, onError) => {
+  const { axiosClient } = useAuthContext();
+
+  return useMutation({
+    mutationFn: (data) => createHall(axiosClient, data),
+    onSuccess,
+    onError,
+  });
+};

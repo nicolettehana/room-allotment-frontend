@@ -11,18 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { MdOutlineFilterList } from "react-icons/md";
 
-const OfficeFilter = ({
-  officeCode,
-  setOfficeCode,
-  setPageNumber,
-  query,
-}) => {
-  
-  const office = officeCode === "-1"
-    ? "All"
-    : query?.data?.data?.find(    
-    (row) => row?.officeCode === Number(officeCode)
-  )?.officeName;
+const OfficeFilter = ({ officeCode, setOfficeCode, setPageNumber, query }) => {
+  const office =
+    officeCode === "-1"
+      ? "All"
+      : query?.data?.data?.find((row) => row?.officeCode === Number(officeCode))
+          ?.officeName;
 
   return (
     <Menu closeOnSelect={true}>
@@ -30,7 +24,7 @@ const OfficeFilter = ({
         as={Button}
         variant="outline"
         leftIcon={<MdOutlineFilterList size={20} />}
-        w="fit-content"
+        w="auto"
       >
         <HStack>
           <Text>Office: </Text>
@@ -48,14 +42,14 @@ const OfficeFilter = ({
           }}
         >
           <MenuItemOption value="-1">All</MenuItemOption>
-          {query?.data?.data?.map(
-            (row) =>
-              
-                <MenuItemOption key={row?.officeCode} value={row.officeCode.toString()} >
-                  {row?.officeName}
-                </MenuItemOption>
-              
-          )}
+          {query?.data?.data?.map((row) => (
+            <MenuItemOption
+              key={row?.officeCode}
+              value={row.officeCode.toString()}
+            >
+              {row?.officeName}
+            </MenuItemOption>
+          ))}
         </MenuOptionGroup>
       </MenuList>
     </Menu>
