@@ -56,7 +56,7 @@ for (let h = 8; h <= 22; h++) {
     });
   }
 }
-const BookingForm = () => {
+const UpdateBookingForm = ({ bookingQuery }) => {
   const [selectedOffice, setSelectedOffice] = useState("");
 
   const toast = useToast();
@@ -81,7 +81,7 @@ const BookingForm = () => {
         position: "top-right",
         status: "success",
         title: "Success",
-        description: response?.data?.detail || "Request Submitted",
+        description: response?.data?.detail || "Updated",
       });
 
       return response;
@@ -95,28 +95,30 @@ const BookingForm = () => {
         status: "error",
         title: "Error",
         description:
-          error?.response?.data?.detail || "Unable to create booking.",
+          error?.response?.data?.detail || "Unable to update booking.",
       });
       return error;
     },
   );
 
   const initialValues = {
-    department: profileQuery?.data?.department || "",
-    contactName: profileQuery?.data?.name || "",
-    noOfAttendees: "",
-    purpose: "",
-    remarks: "",
-    contactMobileNo: "",
-    meetingDate: "",
-    startTime: dayjs().format("HH:mm"),
-    endTime: dayjs().add(1, "hour").format("HH:mm"),
-    hallOfficeCode: "",
-    hallId: "",
-    contactDesignation: profileQuery?.data?.designation || "",
+    bookingId: bookingQuery?.data?.data?.bookingId,
+    department: bookingQuery?.data?.data?.department || "",
+    contactName: bookingQuery?.data?.data?.name || "",
+    noOfAttendees: bookingQuery?.data?.data?.noOfAttendees || "",
+    purpose: bookingQuery?.data?.data?.purpose || "",
+    remarks: bookingQuery?.data?.data?.remarks || "",
+    contactMobileNo: bookingQuery?.data?.data?.contactMobileNo || "",
+    meetingDate: bookingQuery?.data?.data?.meetingDate || "",
+    startTime: bookingQuery?.data?.data?.startTime || "",
+    endTime: bookingQuery?.data?.data?.endTime || "",
+    hallOfficeCode: bookingQuery?.data?.data?.hallOfficeCode || "",
+    hallId: bookingQuery?.data?.data?.hallId || "",
+    contactDesignation: bookingQuery?.data?.data?.contactDesignation || "",
   };
 
   const validationSchema = yup.object({
+    bookingId: yup.string().required("Booking ID is required"),
     department: yup.string().required("Department is required"),
     contactName: yup.string().required("Name is required"),
     noOfAttendees: yup
@@ -361,4 +363,4 @@ const BookingForm = () => {
   );
 };
 
-export default BookingForm;
+export default UpdateBookingForm;

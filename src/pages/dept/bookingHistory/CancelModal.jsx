@@ -20,7 +20,7 @@ const CancelModal = ({ isOpen, onClose, data }) => {
       <ModalOverlay />
       <ModalContent>
         <ModalCloseButton />
-        <ModalHeader fontSize="lg" fontWeight="bold" pt={6}>
+        <ModalHeader fontSize="lg" fontWeight="bold" pt={6} color="brown.800">
           Are you sure you want to cancel?
         </ModalHeader>
         <ModalBody>

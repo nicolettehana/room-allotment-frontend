@@ -40,10 +40,14 @@ import VisitorPieChart from "../../components/charts/VisitorPieChart";
 import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
 import StatCard2 from "../../components/core/theme/StatCard2";
 import { Link } from "react-router-dom";
-import { useFetchPendingBookings } from "../../hooks/hallBookingQueries";
+import {
+  useFetchPendingBookings,
+  useFetchHistory,
+} from "../../hooks/hallBookingQueries";
 import TimelineScheduler from "../../components/charts/TimelineScheduler";
 import { useFetchHalls } from "../../hooks/roomQueries";
 import { useFetchHallAllotments } from "../../hooks/hallBookingQueries";
+import RescheduleTableWrapper from "./RescheduleTableWrapper";
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-GB", {
@@ -73,7 +77,7 @@ const DashboardPage = () => {
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
   const [endDate, setEndDate] = useState(
-    dayjs().startOf("day").format("YYYY-MM-DD"),
+    dayjs().add(1, "months").startOf("day").format("YYYY-MM-DD"),
   );
   const { role } = useAuth();
 
@@ -86,6 +90,30 @@ const DashboardPage = () => {
   const profileQuery = useFetchUsersProfile();
   const hallsQuery = useFetchHalls(officeCode);
   const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
+  const rescheduleQuery = useFetchHistory(
+    searchValue,
+    0,
+    50,
+    startDate,
+    endDate,
+    3,
+  );
+  const allottedQuery = useFetchHistory(
+    searchValue,
+    0,
+    50,
+    dayjs().subtract(1, "days").startOf("day").format("YYYY-MM-DD"),
+    endDate,
+    2,
+  );
+  const rejectedQuery = useFetchHistory(
+    searchValue,
+    0,
+    50,
+    dayjs().startOf("day").format("YYYY-MM-DD"),
+    endDate,
+    4,
+  );
 
   const exportVisitorsMutation = useExportVisitors();
 
@@ -142,8 +170,66 @@ const DashboardPage = () => {
       <Main>
         <Section>
           <Container minW="full">
-            <Text>Upcoming Meetings</Text>
-            <Text>Rejected/Reschedule Bookings</Text>
+            {allottedQuery?.data?.data?.content?.length > 0 && (
+              <Box
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="lg"
+                boxShadow="md"
+                p={5}
+                bg="brown.50"
+                mb={4}
+              >
+                <Heading size="sm" pb={2} color="green.600">
+                  Upcoming Meetings
+                </Heading>
+                <RescheduleTableWrapper
+                  query={allottedQuery}
+                  pageNumber={0}
+                  setPageNumber={setPageNumber}
+                ></RescheduleTableWrapper>
+              </Box>
+            )}
+            {rescheduleQuery?.data?.data?.content?.length > 0 && (
+              <Box
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="lg"
+                boxShadow="md"
+                p={5}
+                bg="brown.50"
+                mb={4}
+              >
+                <Heading size="sm" py={2} color="orange.600">
+                  Pending for Reschedule
+                </Heading>
+                <RescheduleTableWrapper
+                  query={rescheduleQuery}
+                  pageNumber={0}
+                  setPageNumber={setPageNumber}
+                ></RescheduleTableWrapper>
+              </Box>
+            )}
+            {rejectedQuery?.data?.data?.content?.length > 0 && (
+              <Box
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="lg"
+                boxShadow="md"
+                p={5}
+                bg="brown.50"
+                mb={2}
+              >
+                <Heading size="sm" py={2} color="red.600">
+                  Rejected Bookings
+                </Heading>
+                <RescheduleTableWrapper
+                  query={rejectedQuery}
+                  pageNumber={0}
+                  setPageNumber={setPageNumber}
+                ></RescheduleTableWrapper>
+              </Box>
+            )}
             <Stack spacing={4} mt={8}>
               {/* Filter */}
               <HStack justifyContent="space-between" spacing={2}>

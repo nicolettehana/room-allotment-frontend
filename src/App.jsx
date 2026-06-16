@@ -27,6 +27,7 @@ import CreateBookingPage from "./pages/dept/CreateBookingPage";
 import InboxPage from "./pages/asad/inbox/InboxPage";
 import AllBookingsPage from "./pages/asad/allBookings/AllBookingsPage";
 import HallsPage from "./pages/asad/halls/HallsPage";
+import UpdateBookingPage from "./pages/dept/UpdateBookingPage";
 
 const App = () => {
   return (
@@ -74,6 +75,10 @@ const App = () => {
           <Route path="dashboard" element={<DeptDashboardPage />} />
           <Route path="create-booking" element={<CreateBookingPage />} />
           <Route path="booking-history" element={<BookingHistoryPage />} />
+          <Route
+            path="/booking-history/update-booking"
+            element={<UpdateBookingPage />}
+          />
 
           {/* Profile */}
           <Route path="profile" element={<UserProfilePage />} />

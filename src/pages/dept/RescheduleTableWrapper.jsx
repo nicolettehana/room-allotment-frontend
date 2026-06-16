@@ -9,7 +9,7 @@ import {
   Th,
   Thead,
   Tr,
-} from "../../../components/core/Table";
+} from "../../components/core/Table";
 import {
   Badge,
   Box,
@@ -39,16 +39,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { IoDocumentText } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import VisitorPhotoModal from "./VisitorPhotoModal";
-import VisitorPassModal from "./VisitorPassModal";
 import dayjs from "dayjs";
 import { TiCancel } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";
 import { GrFormView } from "react-icons/gr";
-import ViewRemarkModal from "./ViewRemarkModal";
-import { useGetRemark } from "../../../hooks/hallBookingQueries";
-import CancelModal from "./CancelModal";
-import UpdateBookingForm from "../../../forms/register/UpdateBookingForm";
+import ViewRemarkModal from "./bookingHistory/ViewRemarkModal";
+import CancelModal from "./bookingHistory/CancelModal";
+import { useGetRemark } from "../../hooks/hallBookingQueries";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -82,7 +79,7 @@ const getStatusColorScheme = (status) => {
   }
 };
 
-const BookingHistoryTableWrapper = ({
+const RescheduleTableWrapper = ({
   isEstate = true,
   query,
   searchText,
@@ -107,7 +104,6 @@ const BookingHistoryTableWrapper = ({
 
   // Queries
   const queryClient = useQueryClient();
-
   const getRemark = useGetRemark(
     (response) => {
       console.log("SUCCESS", response);
@@ -225,27 +221,6 @@ const BookingHistoryTableWrapper = ({
         onClose={viewRemarkDisclosure.onClose}
         data={remark}
       />
-      {selectedVisitorCode && (
-        <VisitorPassModal
-          visitorCode={selectedVisitorCode}
-          vPassNo={selectedVPassNo}
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            setSelectedVisitorCode(null);
-          }}
-        />
-      )}
-      {selectedVisitorId && (
-        <VisitorPhotoModal
-          visitorCode={selectedVisitorId}
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            setSelectedVisitorId(null); // reset for next use
-          }}
-        />
-      )}
       <CancelModal
         isOpen={cancelDisclosure.isOpen}
         onClose={cancelDisclosure.onClose}
@@ -256,16 +231,12 @@ const BookingHistoryTableWrapper = ({
         <Table>
           <Thead>
             <Tr>
-              <Th>Sl. No.</Th>
               <Th>Booking ID.</Th>
               <Th>Purpose</Th>
               <Th>Date & Time</Th>
               <Th>Hall</Th>
-              <Th>No. of Attendees</Th>
               <Th>Status</Th>
               <Th>Action</Th>
-              <Th>Remarks</Th>
-              <Th>Contact Person Details</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -275,19 +246,6 @@ const BookingHistoryTableWrapper = ({
             )?.map((row, index) => {
               return (
                 <Tr key={index}>
-                  <Td>
-                    <SkeletonText
-                      w="8"
-                      noOfLines={1}
-                      isLoaded={!query.isPending}
-                      fadeDuration={index}
-                      fontSize="sm"
-                    >
-                      {pageNumber * (query?.data?.data?.size || 0) + index + 1}
-                      {/* {index + 1} */}
-                      {/* {elementCounter(index, query)} */}
-                    </SkeletonText>
-                  </Td>
                   <Td>
                     <Text fontSize="sm">{row?.bookingId}</Text>
                   </Td>
@@ -321,9 +279,6 @@ const BookingHistoryTableWrapper = ({
                       <br />
                       {row?.hallName}
                     </Text>
-                  </Td>
-                  <Td>
-                    <Text fontSize="sm">{row?.noOfAttendees}</Text>
                   </Td>
                   <Td>
                     <Badge
@@ -389,9 +344,6 @@ const BookingHistoryTableWrapper = ({
                           rightIcon={<FaEdit />}
                           onClick={() => {
                             setRowState(row);
-                            navigate("/booking-history/update-booking", {
-                              state: { bookingQuery: row },
-                            });
                             //getRemarkHandler();
                             //viewRemarkDisclosure.onOpen();
                           }}
@@ -401,18 +353,6 @@ const BookingHistoryTableWrapper = ({
                       )}
                     </VStack>
                   </Td>
-                  <Td>
-                    <Text fontSize="sm">{row?.remarks}</Text>
-                  </Td>
-                  <Td>
-                    <Text fontSize="sm">
-                      {row?.contactName}
-                      <br />
-                      {row?.contactDesignation}
-                      <br />
-                      {row?.contactMobileNo}
-                    </Text>
-                  </Td>
                 </Tr>
               );
             })}
@@ -421,13 +361,13 @@ const BookingHistoryTableWrapper = ({
       </TableContainer>
 
       {/* Pagination */}
-      <Pagination
+      {/* <Pagination
         query={query}
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
-      />
+      /> */}
     </Stack>
   );
 };
 
-export default BookingHistoryTableWrapper;
+export default RescheduleTableWrapper;
