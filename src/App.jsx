@@ -76,7 +76,7 @@ const App = () => {
           <Route path="create-booking" element={<CreateBookingPage />} />
           <Route path="booking-history" element={<BookingHistoryPage />} />
           <Route
-            path="/booking-history/update-booking"
+            path="booking-history/update-booking"
             element={<UpdateBookingPage />}
           />
 

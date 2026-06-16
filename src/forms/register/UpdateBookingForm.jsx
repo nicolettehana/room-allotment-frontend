@@ -57,7 +57,8 @@ for (let h = 8; h <= 22; h++) {
   }
 }
 const UpdateBookingForm = ({ bookingQuery }) => {
-  const [selectedOffice, setSelectedOffice] = useState("");
+  
+  const [selectedOffice, setSelectedOffice] = useState(bookingQuery?.hallOfficeCode);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -102,19 +103,19 @@ const UpdateBookingForm = ({ bookingQuery }) => {
   );
 
   const initialValues = {
-    bookingId: bookingQuery?.data?.data?.bookingId,
-    department: bookingQuery?.data?.data?.department || "",
-    contactName: bookingQuery?.data?.data?.name || "",
-    noOfAttendees: bookingQuery?.data?.data?.noOfAttendees || "",
-    purpose: bookingQuery?.data?.data?.purpose || "",
-    remarks: bookingQuery?.data?.data?.remarks || "",
-    contactMobileNo: bookingQuery?.data?.data?.contactMobileNo || "",
-    meetingDate: bookingQuery?.data?.data?.meetingDate || "",
-    startTime: bookingQuery?.data?.data?.startTime || "",
-    endTime: bookingQuery?.data?.data?.endTime || "",
-    hallOfficeCode: bookingQuery?.data?.data?.hallOfficeCode || "",
-    hallId: bookingQuery?.data?.data?.hallId || "",
-    contactDesignation: bookingQuery?.data?.data?.contactDesignation || "",
+    bookingId: bookingQuery?.bookingId,
+    department: bookingQuery?.department || "",
+    contactName: bookingQuery?.contactName || "",
+    noOfAttendees: bookingQuery?.noOfAttendees || "",
+    purpose: bookingQuery?.purpose || "",
+    remarks: bookingQuery?.remarks || "",
+    contactMobileNo: bookingQuery?.contactMobileNo || "",
+    meetingDate: bookingQuery?.meetingDate || "",
+    startTime: bookingQuery?.startTime || "",
+    endTime: bookingQuery?.endTime || "",
+    hallOfficeCode: bookingQuery?.hallOfficeCode || "",
+    hallId: bookingQuery?.hallId || "",
+    contactDesignation: bookingQuery?.contactDesignation || "",
   };
 
   const validationSchema = yup.object({

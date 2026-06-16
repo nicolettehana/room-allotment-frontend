@@ -343,6 +343,12 @@ const BookingHistoryTableWrapper = ({
                           //lineHeight="1"
                           size="xs"
                           rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/dept/booking-history/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
                         >
                           Edit
                         </Button>
@@ -389,11 +395,9 @@ const BookingHistoryTableWrapper = ({
                           rightIcon={<FaEdit />}
                           onClick={() => {
                             setRowState(row);
-                            navigate("/booking-history/update-booking", {
+                            navigate("/dept/booking-history/update-booking", {
                               state: { bookingQuery: row },
                             });
-                            //getRemarkHandler();
-                            //viewRemarkDisclosure.onOpen();
                           }}
                         >
                           Edit

@@ -20,7 +20,7 @@ const GuestRoutes = () => {
 
   // Hooks
   //const contianerBg = useColorModeValue("brand.300", "brand.700");
-  const contianerBg = useColorModeValue("zinc.100", "white");
+  const contianerBg = useColorModeValue("white", "white");
   //const stackBg = useColorModeValue("brand.50", "brand.950");
   const stackBg = useColorModeValue("white", "white");
 
@@ -58,17 +58,21 @@ const GuestRoutes = () => {
         bg={contianerBg}
         w="full"
         maxW="none"
-        h="100dvh"
-        overflow="hidden"
+        //h="100dvh"
+        //overflow="hidden"
       >
-        <Center h="full" p={{ base: 4, md: 12 }}>
+        <Center 
+        w="full"
+        //h="full" 
+        //p={{ base: 4, md: 12 }}
+        >
           <Stack
             w="full"
             maxW="container.xl"
             h="full"
             bg={stackBg}
             borderRadius="xl"
-            boxShadow="xl"
+            //boxShadow="xl"
             justify="space-between"
           >
             <GuestNavbar />

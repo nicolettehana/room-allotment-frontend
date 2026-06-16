@@ -298,6 +298,12 @@ const RescheduleTableWrapper = ({
                           //lineHeight="1"
                           size="xs"
                           rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/dept/booking-history/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
                         >
                           Edit
                         </Button>
@@ -344,8 +350,9 @@ const RescheduleTableWrapper = ({
                           rightIcon={<FaEdit />}
                           onClick={() => {
                             setRowState(row);
-                            //getRemarkHandler();
-                            //viewRemarkDisclosure.onOpen();
+                            navigate("/dept/booking-history/update-booking", {
+                              state: { bookingQuery: row },
+                            });
                           }}
                         >
                           Edit
