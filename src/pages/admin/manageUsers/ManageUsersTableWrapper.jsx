@@ -253,8 +253,8 @@ const ManageUsersTableWrapper = ({
                         {row?.role === "ADMIN"
                           ? "SuperAdmin"
                           : row?.role === "ASAD"
-                            ? "Admin"
-                            : "Security"}
+                            ? "Nazir"
+                            : "SAD"}
                       </Badge>
                     </SkeletonText>
                   </Td>

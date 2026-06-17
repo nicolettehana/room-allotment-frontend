@@ -191,7 +191,7 @@ const HallsPage = () => {
               )?.map((row, index) => {
                 return (
                   <>
-                    <Text fontWeight="bold">
+                    <Text fontWeight="bold" py={3}>
                       {hallsOfficeWiseQuery?.data?.data[index]?.officeName}
                     </Text>
                     {/* Table */}

@@ -161,7 +161,7 @@ const HomePage = () => {
                 setOfficeCode={handleOfficeChange}
               ></OfficeFilter>
             </HStack>
-            <Box position="absolute" left="50%">
+            <Box position="absolute" left="43%">
               <Text
                 textAlign="center"
                 fontWeight="bold"

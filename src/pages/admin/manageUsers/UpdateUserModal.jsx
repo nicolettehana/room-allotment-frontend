@@ -74,9 +74,9 @@ const UpdateUserModal = ({ isOpen, onClose, row }) => {
     officeCode: row?.officeCode,
     roleName:
       row?.role === "SAD"
-        ? "Security Personnel"
+        ? "SAD"
         : row?.role === "ASAD"
-          ? "Admin"
+          ? "Nazir"
           : "Superadmin",
   };
 
