@@ -37,6 +37,7 @@ import dayjs from "dayjs";
 import { useFetchUsersProfile } from "../../../hooks/userQueries";
 import { useFetchHistory } from "../../../hooks/hallBookingQueries";
 import StatusFilter from "../../../components/filter/StatusFilter";
+import { useExportBookings } from "../../../hooks/hallBookingQueries";
 
 const BookingHistoryPage = () => {
   // States
@@ -60,7 +61,7 @@ const BookingHistoryPage = () => {
   const navigate = useNavigate();
 
   // Queries
-
+  const exportBookingsMutation = useExportBookings();
   const profileQuery = useFetchUsersProfile();
 
   const historyQuery = useFetchHistory(
@@ -77,24 +78,24 @@ const BookingHistoryPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   //Handlers
+  const handleExportData = () => {
+    console.log("Clicked");
 
-  const handleExportVisitors = () => {
-    const extension = format === "PDF" ? "pdf" : "xlsx";
-
-    exportVisitorsMutation.mutate(
+    exportBookingsMutation.mutate(
       {
         startDate,
         endDate,
-        format: format,
-        withPhoto: withPhoto,
+        status,
+        all: 0,
       },
       {
         onSuccess: (response) => {
-          console.log("Seuccess");
-          const mimeType =
-            format === "PDF"
-              ? "application/pdf"
-              : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+          console.log("Success");
+          const mimeType = "PDF";
+          //       const mimeType =
+          //         format === "PDF"
+          //           ? "application/pdf"
+          //           : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
           const blob = new Blob([response], { type: mimeType });
 
@@ -102,7 +103,7 @@ const BookingHistoryPage = () => {
 
           const link = document.createElement("a");
           link.href = url;
-          link.download = `Visitors_${startDate}-${endDate}.${extension}`;
+          link.download = `Bookings_${startDate}-${endDate}.pdf`;
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -141,59 +142,18 @@ const BookingHistoryPage = () => {
                 </HStack>
 
                 <HStack>
-                  <Menu>
-                    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-                      <ModalOverlay />
-                      <ModalContent>
-                        <ModalHeader>Export Options</ModalHeader>
-                        <ModalBody>
-                          <RadioGroup value={withPhoto} onChange={setWithPhoto}>
-                            <VStack align="start">
-                              <Radio value="1">Include Visitor Photos</Radio>
-                              <Radio value="0">Without Photos</Radio>
-                            </VStack>
-                          </RadioGroup>
-                        </ModalBody>
-                        <ModalFooter>
-                          <Button mr={3} onClick={onClose}>
-                            Cancel
-                          </Button>
-                          <Button
-                            colorScheme="blue"
-                            onClick={handleExportVisitors}
-                            variant="brand"
-                          >
-                            Download {format}
-                          </Button>
-                        </ModalFooter>
-                      </ModalContent>
-                    </Modal>
-                    <MenuButton
-                      as={Button}
-                      leftIcon={<FaFileDownload />}
-                      variant="brand"
-                    >
-                      Download
-                    </MenuButton>
-                    <MenuList>
-                      <MenuItem
-                        onClick={() => {
-                          setFormat("Excel");
-                          onOpen();
-                        }}
-                      >
-                        Excel
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          setFormat("PDF");
-                          onOpen();
-                        }}
-                      >
-                        PDF
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
+                  <Button
+                    //type="submit"
+                    colorScheme="brand"
+                    //isLoading={authenticateQuery.isPending}
+                    loadingText="Downloading..."
+                    variant="brand"
+                    width="full"
+                    leftIcon={<FaFileDownload />}
+                    onClick={handleExportData}
+                  >
+                    Download
+                  </Button>
                 </HStack>
               </HStack>
 
