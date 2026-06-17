@@ -50,9 +50,12 @@ const timeOptions = [];
 
 for (let h = 8; h <= 22; h++) {
   for (let m = 0; m < 60; m += 15) {
+    const hour12 = h % 12 || 12;
+    const period = h >= 12 ? "PM" : "AM";
+
     timeOptions.push({
-      value: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
-      label: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`,
+      value: `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`, // keep 24h value for backend
+      label: `${String(hour12).padStart(2, "0")}:${String(m).padStart(2, "0")} ${period}`, // display AM/PM
     });
   }
 }
@@ -111,8 +114,8 @@ const UpdateBookingForm = ({ bookingQuery }) => {
     remarks: bookingQuery?.remarks || "",
     contactMobileNo: bookingQuery?.contactMobileNo || "",
     meetingDate: bookingQuery?.meetingDate || "",
-    startTime: bookingQuery?.startTime || "",
-    endTime: bookingQuery?.endTime || "",
+    startTime:  bookingQuery?.startTime?.substring(0, 5) || "",
+    endTime: bookingQuery?.endTime?.substring(0,5) || "",
     hallOfficeCode: bookingQuery?.hallOfficeCode || "",
     hallId: bookingQuery?.hallId || "",
     contactDesignation: bookingQuery?.contactDesignation || "",
@@ -282,19 +285,32 @@ const UpdateBookingForm = ({ bookingQuery }) => {
                   options={timeOptions}
                 /> */}
 
-                <InputField
+                <SelectFieldSearchable
+  name="startTime"
+  label="Start Time of meeting"
+  placeholder="Select Start Time"
+  options={timeOptions}
+/>
+
+                {/* <InputField
                   name="startTime"
                   label="Start Time of meeting"
                   type="time"
                   step={900}
                   fontSize="sm"
-                />
-                <InputField
+                /> */}
+                {/* <InputField
                   name="endTime"
                   label="End Time of meeting"
                   type="time"
                   fontSize="sm"
-                />
+                /> */}
+                <SelectFieldSearchable
+  name="endTime"
+  label="End Time of meeting"
+  placeholder="Select End Time"
+  options={timeOptions}
+/>
               </SimpleGrid>
 
               <InputField

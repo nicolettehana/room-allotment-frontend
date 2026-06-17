@@ -1,6 +1,6 @@
 import { Box, Flex, Text, Tooltip, VStack } from "@chakra-ui/react";
 
-const START_HOUR = 10;
+const START_HOUR = 9;
 const END_HOUR = 18;
 
 const TOTAL_MINUTES = (END_HOUR - START_HOUR + 1) * 60;
@@ -39,7 +39,7 @@ export default function TimelineScheduler({ halls, meetings }) {
       boxShadow="xl"
     >
       {/* Header */}
-      <Flex bg="gray.50" color="brown.800" minW="1400px">
+      <Flex bg="gray.50" color="brown.800" w="100%">
         <Box
           w="220px"
           p={4}
@@ -72,7 +72,7 @@ export default function TimelineScheduler({ halls, meetings }) {
       </Flex>
 
       {/* Rows */}
-      <VStack spacing={0} align="stretch" minW="1400px">
+      <VStack spacing={0} align="stretch" w="100%">
         {halls?.map((hall) => {
           const hallMeetings = meetings?.filter((m) => m?.hallId === hall?.id);
 
@@ -132,7 +132,7 @@ export default function TimelineScheduler({ halls, meetings }) {
                       placement="top"
                       label={
                         <Box>
-                          <Text fontWeight="bold">{meeting?.department}</Text>
+                          <Text fontWeight="bold" >{meeting?.department}</Text>
 
                           <Text>Purpose: {meeting?.purpose}</Text>
 
@@ -160,11 +160,15 @@ export default function TimelineScheduler({ halls, meetings }) {
                         cursor="pointer"
                         overflow="hidden"
                       >
-                        <Text fontWeight="bold" fontSize="sm">
+                        <Text fontWeight="bold" fontSize="sm" whiteSpace="nowrap"
+  overflow="hidden"
+  textOverflow="ellipsis">
                           {meeting?.department}
                         </Text>
 
-                        <Text fontSize="xs">
+                        <Text fontSize="xs" whiteSpace="nowrap"
+  overflow="hidden"
+  textOverflow="ellipsis">
                           {formatTime(meeting?.start)}
                           {" - "}
                           {formatTime(meeting?.end)}

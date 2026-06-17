@@ -18,8 +18,8 @@ import {
   Show,
   VStack,
   FormControl,
-  Input,
-  Divider
+  FormLabel,
+  Input
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import SignInForm from "../../forms/auth/SignInForm";
@@ -43,23 +43,27 @@ const formatDate = (dateString) => {
 
 const HomePage = () => {
   //States
-    const [officeCode, setOfficeCode] = useState("-1");
-    const [selectedDate, setSelectedDate] = useState(
-        new Date().toISOString().split("T")[0],
-      );
-    // Queries
-    const officesQuery = useFetchOffices();
-    const hallsQuery = useFetchHalls(officeCode);
-    const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
+  const [officeCode, setOfficeCode] = useState("-1");
+  const [selectedDate, setSelectedDate] = useState(
+      new Date().toISOString().split("T")[0],
+    );
+  // Queries
+  const officesQuery = useFetchOffices();
+  const hallsQuery = useFetchHalls(officeCode);
+  const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
+  // const xsrfQuery = useGetXsrfToken();
 
   return (
     <Main bg="red">
       <Section bg="red">
         <Container maxW="container.xl" bg="white">
-          <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={0}>
-            {/* LHS */}
+          <SimpleGrid 
+          //columns={{ base: 1, lg: 2 }} 
+          templateColumns={{ base: "1fr", lg: "30% 70%" }}
+          spacing={5}>
 
-            {/* RHS */}
+            {/* LHS */}            
+
             <Center>
               <VStack spacing={8}>
                 <Box
@@ -79,6 +83,7 @@ const HomePage = () => {
               </VStack>
             </Center>
 
+            {/* RHS */}
             <Hide below="lg">
               <Stack
                 spacing={4}
@@ -105,17 +110,14 @@ const HomePage = () => {
                         </Text>
                       </Text>
                     </Stack>
+                    
                   </Stack>
                 </Stack>
               </Stack>
             </Hide>
           </SimpleGrid>
         </Container>
-        <Divider borderColor="brown.700" 
-  borderWidth="2px"      // thickness
-  />
-        <Stack spacing={4} mx={8} my={17} >
-          
+        <Stack spacing={4} mt={8}>
               {/* Filter */}
               <HStack justifyContent="space-between" spacing={2}>
                 <HStack>
