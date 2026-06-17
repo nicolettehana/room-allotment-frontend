@@ -36,7 +36,6 @@ import { useNavigate } from "react-router-dom";
 import SelectFieldSearchable from "../../components/core/formik/SelectFieldSearchable";
 import dayjs from "dayjs";
 import { MdHorizontalRule } from "react-icons/md";
-import PhotoInput from "./PhotoInput";
 import { IoMdSend } from "react-icons/io";
 import { useFetchVisitorInformation } from "../../hooks/visitorQueries";
 import { useFetchUsersProfile } from "../../hooks/userQueries";
@@ -292,11 +291,11 @@ const BookingForm = () => {
                 /> */}
 
                 <SelectFieldSearchable
-  name="startTime"
-  label="Start Time of meeting"
-  placeholder="Select Start Time"
-  options={timeOptions}
-/>
+                  name="startTime"
+                  label="Start Time of meeting"
+                  placeholder="Select Start Time"
+                  options={timeOptions}
+                />
                 {/* <InputField
                   name="endTime"
                   label="End Time of meeting"
@@ -304,11 +303,11 @@ const BookingForm = () => {
                   fontSize="sm"
                 /> */}
                 <SelectFieldSearchable
-  name="endTime"
-  label="End Time of meeting"
-  placeholder="Select End Time"
-  options={timeOptions}
-/>
+                  name="endTime"
+                  label="End Time of meeting"
+                  placeholder="Select End Time"
+                  options={timeOptions}
+                />
               </SimpleGrid>
 
               <InputField

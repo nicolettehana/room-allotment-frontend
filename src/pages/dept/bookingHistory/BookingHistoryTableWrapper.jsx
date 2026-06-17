@@ -39,8 +39,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { IoDocumentText } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import VisitorPhotoModal from "./VisitorPhotoModal";
-import VisitorPassModal from "./VisitorPassModal";
 import dayjs from "dayjs";
 import { TiCancel } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";

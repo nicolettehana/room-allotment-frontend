@@ -39,8 +39,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { IoDocumentText } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
-import VisitorPhotoModal from "../sad/visitors/VisitorPhotoModal";
-import VisitorPassModal from "../sad/visitors/VisitorPassModal";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -141,8 +139,6 @@ const VisitorsTableWrapper = ({
   if (query.isSuccess && query?.data?.data?.content?.length === 0) {
     return (
       <Center py={16}>
-        
-
         <VStack spacing={4}>
           <Box
             bg="paperSecondary"
@@ -166,16 +162,16 @@ const VisitorsTableWrapper = ({
   return (
     <Stack spacing={4}>
       {selectedVisitorCode && (
-          <VisitorPassModal
-            visitorCode={selectedVisitorCode}
-            vPassNo={selectedVPassNo}
-            isOpen={isOpen}
-            onClose={() => {
-              onClose();
-              setSelectedVisitorCode(null);
-            }}
-          />
-        )}
+        <VisitorPassModal
+          visitorCode={selectedVisitorCode}
+          vPassNo={selectedVPassNo}
+          isOpen={isOpen}
+          onClose={() => {
+            onClose();
+            setSelectedVisitorCode(null);
+          }}
+        />
+      )}
       {selectedVisitorId && (
         <VisitorPhotoModal
           visitorCode={selectedVisitorId}

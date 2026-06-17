@@ -36,7 +36,6 @@ import { useNavigate } from "react-router-dom";
 import SelectFieldSearchable from "../../components/core/formik/SelectFieldSearchable";
 import dayjs from "dayjs";
 import { MdHorizontalRule } from "react-icons/md";
-import PhotoInput from "../register/PhotoInput";
 import { IoMdSend } from "react-icons/io";
 import { useFetchVisitorInformation } from "../../hooks/visitorQueries";
 import { useFetchUsersProfile } from "../../hooks/userQueries";

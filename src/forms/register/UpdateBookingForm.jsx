@@ -36,7 +36,6 @@ import { useNavigate } from "react-router-dom";
 import SelectFieldSearchable from "../../components/core/formik/SelectFieldSearchable";
 import dayjs from "dayjs";
 import { MdHorizontalRule } from "react-icons/md";
-import PhotoInput from "./PhotoInput";
 import { IoMdSend } from "react-icons/io";
 import { useFetchVisitorInformation } from "../../hooks/visitorQueries";
 import { useFetchUsersProfile } from "../../hooks/userQueries";
@@ -60,8 +59,9 @@ for (let h = 8; h <= 22; h++) {
   }
 }
 const UpdateBookingForm = ({ bookingQuery }) => {
-  
-  const [selectedOffice, setSelectedOffice] = useState(bookingQuery?.hallOfficeCode);
+  const [selectedOffice, setSelectedOffice] = useState(
+    bookingQuery?.hallOfficeCode,
+  );
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -114,8 +114,8 @@ const UpdateBookingForm = ({ bookingQuery }) => {
     remarks: bookingQuery?.remarks || "",
     contactMobileNo: bookingQuery?.contactMobileNo || "",
     meetingDate: bookingQuery?.meetingDate || "",
-    startTime:  bookingQuery?.startTime?.substring(0, 5) || "",
-    endTime: bookingQuery?.endTime?.substring(0,5) || "",
+    startTime: bookingQuery?.startTime?.substring(0, 5) || "",
+    endTime: bookingQuery?.endTime?.substring(0, 5) || "",
     hallOfficeCode: bookingQuery?.hallOfficeCode || "",
     hallId: bookingQuery?.hallId || "",
     contactDesignation: bookingQuery?.contactDesignation || "",
@@ -286,11 +286,11 @@ const UpdateBookingForm = ({ bookingQuery }) => {
                 /> */}
 
                 <SelectFieldSearchable
-  name="startTime"
-  label="Start Time of meeting"
-  placeholder="Select Start Time"
-  options={timeOptions}
-/>
+                  name="startTime"
+                  label="Start Time of meeting"
+                  placeholder="Select Start Time"
+                  options={timeOptions}
+                />
 
                 {/* <InputField
                   name="startTime"
@@ -306,11 +306,11 @@ const UpdateBookingForm = ({ bookingQuery }) => {
                   fontSize="sm"
                 /> */}
                 <SelectFieldSearchable
-  name="endTime"
-  label="End Time of meeting"
-  placeholder="Select End Time"
-  options={timeOptions}
-/>
+                  name="endTime"
+                  label="End Time of meeting"
+                  placeholder="Select End Time"
+                  options={timeOptions}
+                />
               </SimpleGrid>
 
               <InputField
