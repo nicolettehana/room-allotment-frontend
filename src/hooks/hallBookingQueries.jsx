@@ -32,10 +32,11 @@ const fetchHistory = (
   pageSize,
   startDate,
   endDate,
-  status
+  status,
+  all,
 ) => {
   return axiosClient.get(
-    `/booking?page=${pageNumber}&size=${pageSize}&search=${searchValue}&startDate=${startDate}&endDate=${endDate}&status=${status}`,
+    `/booking?page=${pageNumber}&size=${pageSize}&search=${searchValue}&startDate=${startDate}&endDate=${endDate}&status=${status}&all=${all}`,
   );
 };
 
@@ -45,7 +46,8 @@ export const useFetchHistory = (
   pageSize,
   startDate,
   endDate,
-  status
+  status,
+  all,
 ) => {
   const { axiosClient } = useAuthContext();
 
@@ -57,7 +59,8 @@ export const useFetchHistory = (
       pageSize,
       startDate,
       endDate,
-      status
+      status,
+      all,
     ],
     queryFn: () =>
       fetchHistory(
@@ -67,7 +70,8 @@ export const useFetchHistory = (
         pageSize,
         startDate,
         endDate,
-        status
+        status,
+        all,
       ),
   });
 };
@@ -91,7 +95,6 @@ export const useFetchPendingBookings = (pageNumber, pageSize) => {
     queryFn: () => fetchPendingBookings(axiosClient, pageNumber, pageSize),
   });
 };
-
 
 /**
  * ----------------------------
@@ -148,5 +151,23 @@ export const useFetchHallAllotments = (date, officeCode) => {
   return useQuery({
     queryKey: ["hall-allotments", date, officeCode],
     queryFn: () => fetchHallAllotments(axiosClient, date, officeCode),
+  });
+};
+
+/**
+ * ----------------------------
+ * GET: Export Bookings
+ * ----------------------------
+ */
+const exportBookings = (axiosClient, params) => {
+  return axiosClient.get("/booking/export", { params, responseType: "blob" });
+};
+
+export const useExportBookings = () => {
+  const { axiosClient } = useAuthContext();
+
+  //return useMutation((params) => exportVisitors(axiosClient, params));
+  return useMutation({
+    mutationFn: (params) => exportBookings(axiosClient, params),
   });
 };

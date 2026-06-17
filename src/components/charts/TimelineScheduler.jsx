@@ -11,12 +11,20 @@ const timeToMinutes = (time) => {
 };
 
 const EVENT_COLORS = [
-  "blue.700",
-  "green.700",
-  "purple.700",
-  "orange.700",
-  "pink.700",
+  "blue.800",
+  "green.800",
+  "purple.800",
+  "orange.800",
+  "pink.800",
 ];
+
+// const EVENT_COLORS = [
+//   "brown.900",
+//   "brown.800",
+//   "extra.600",
+//   "brown.600",
+//   "extra.200",
+// ];
 
 let colorIndex = 0;
 
@@ -46,7 +54,6 @@ export default function TimelineScheduler({ halls, meetings }) {
           borderRight="1px solid"
           borderColor="gray.200"
           fontWeight="bold"
-          
         >
           Hall
         </Box>
@@ -132,7 +139,7 @@ export default function TimelineScheduler({ halls, meetings }) {
                       placement="top"
                       label={
                         <Box>
-                          <Text fontWeight="bold" >{meeting?.department}</Text>
+                          <Text fontWeight="bold">{meeting?.department}</Text>
 
                           <Text>Purpose: {meeting?.purpose}</Text>
 
@@ -160,15 +167,22 @@ export default function TimelineScheduler({ halls, meetings }) {
                         cursor="pointer"
                         overflow="hidden"
                       >
-                        <Text fontWeight="bold" fontSize="sm" whiteSpace="nowrap"
-  overflow="hidden"
-  textOverflow="ellipsis">
+                        <Text
+                          fontWeight="bold"
+                          fontSize="sm"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
                           {meeting?.department}
                         </Text>
 
-                        <Text fontSize="xs" whiteSpace="nowrap"
-  overflow="hidden"
-  textOverflow="ellipsis">
+                        <Text
+                          fontSize="xs"
+                          whiteSpace="nowrap"
+                          overflow="hidden"
+                          textOverflow="ellipsis"
+                        >
                           {formatTime(meeting?.start)}
                           {" - "}
                           {formatTime(meeting?.end)}

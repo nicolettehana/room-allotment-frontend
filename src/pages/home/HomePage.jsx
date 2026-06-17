@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Main from "../../components/core/semantics/Main";
 import Section from "../../components/core/semantics/Section";
 import {
@@ -19,7 +19,7 @@ import {
   VStack,
   FormControl,
   Input,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import SignInForm from "../../forms/auth/SignInForm";
@@ -43,14 +43,27 @@ const formatDate = (dateString) => {
 
 const HomePage = () => {
   //States
-    const [officeCode, setOfficeCode] = useState("-1");
-    const [selectedDate, setSelectedDate] = useState(
-        new Date().toISOString().split("T")[0],
-      );
-    // Queries
-    const officesQuery = useFetchOffices();
-    const hallsQuery = useFetchHalls(officeCode);
-    const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
+  const [officeCode, setOfficeCode] = useState("-1");
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  // Queries
+  const officesQuery = useFetchOffices();
+  const hallsQuery = useFetchHalls(officeCode);
+  const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
+
+  //Ref
+  const filterRef = useRef(null);
+
+  //Handlers
+  const handleOfficeChange = (value) => {
+    setOfficeCode(value);
+
+    filterRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   return (
     <Main bg="red">
@@ -111,47 +124,60 @@ const HomePage = () => {
             </Hide>
           </SimpleGrid>
         </Container>
-        <Divider borderColor="brown.700" 
-  borderWidth="2px"      // thickness
-  />
-        <Stack spacing={4} mx={8} my={17} >
-          
-              {/* Filter */}
-              <HStack justifyContent="space-between" spacing={2}>
-                <HStack>
-                  <VStack>
-                    <FormControl>
-                      {/* <FormLabel htmlFor="date">Date</FormLabel> */}
-                      <Input
-                        type="date"
-                        value={selectedDate}
-                        onChange={(e) => setSelectedDate(e.target.value)}
-                      />
-                    </FormControl>
+        <Divider
+          borderColor="brown.700 !important"
+          borderWidth="10px"
+          opacity={1}
+        />
+        <Stack spacing={4} mx={8} my={17}>
+          {/* Filter */}
+          <HStack justifyContent="space-between" spacing={2}>
+            <HStack>
+              <VStack ref={filterRef}>
+                <FormControl>
+                  {/* <FormLabel htmlFor="date">Date</FormLabel> */}
+                  <Input
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => {
+                      setSelectedDate(e.target.value);
+                      filterRef.current?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                      });
+                    }}
+                  />
+                </FormControl>
 
-                    {/* <Heading size="sm">
+                {/* <Heading size="sm">
                       {profileQuery?.data?.data?.office}
                     </Heading> */}
-                  </VStack>
-                  <OfficeFilter
-                    //setPageNumber={setPageNumber}
-                    query={officesQuery}
-                    officeCode={officeCode}
-                    setOfficeCode={setOfficeCode}
-                  ></OfficeFilter>
-                </HStack>
-                <Box position="absolute" left="50%">
-                  <Text textAlign="center" fontWeight="bold" fontSize={25} color="brown.800">
-                    Meetings - {formatDate(selectedDate)}
-                  </Text>
-                </Box>
-              </HStack>
+              </VStack>
+              <OfficeFilter
+                //setPageNumber={setPageNumber}
+                query={officesQuery}
+                officeCode={officeCode}
+                //setOfficeCode={setOfficeCode}
+                setOfficeCode={handleOfficeChange}
+              ></OfficeFilter>
+            </HStack>
+            <Box position="absolute" left="50%">
+              <Text
+                textAlign="center"
+                fontWeight="bold"
+                fontSize={25}
+                color="brown.800"
+              >
+                Meetings - {formatDate(selectedDate)}
+              </Text>
+            </Box>
+          </HStack>
 
-              <TimelineScheduler
-                halls={hallsQuery?.data?.data}
-                meetings={hallAllotmentQuery?.data?.data}
-              />
-            </Stack>
+          <TimelineScheduler
+            halls={hallsQuery?.data?.data}
+            meetings={hallAllotmentQuery?.data?.data}
+          />
+        </Stack>
       </Section>
     </Main>
   );

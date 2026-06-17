@@ -25,7 +25,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import AllBookingsTableWrapper from "./AllBookingsTableWrapper";
+import VisitorsTableWrapper from "./BookingHistoryTableWrapper";
 import SearchInput from "../../../components/core/SearchInput";
 import { useDebounce } from "use-debounce";
 import { PageSizing } from "../../../components/core/Table";
@@ -37,9 +37,8 @@ import dayjs from "dayjs";
 import { useFetchUsersProfile } from "../../../hooks/userQueries";
 import { useFetchHistory } from "../../../hooks/hallBookingQueries";
 import StatusFilter from "../../../components/filter/StatusFilter";
-import { useExportBookings } from "../../../hooks/hallBookingQueries";
 
-const AllBookingsPage = () => {
+const ASADBookingHistoryPage = () => {
   // States
   const [searchText, setSearchText] = useState("");
   const [pageNumber, setPageNumber] = useState(0);
@@ -61,7 +60,7 @@ const AllBookingsPage = () => {
   const navigate = useNavigate();
 
   // Queries
-  const exportBookingsMutation = useExportBookings();
+
   const profileQuery = useFetchUsersProfile();
 
   const historyQuery = useFetchHistory(
@@ -71,7 +70,7 @@ const AllBookingsPage = () => {
     startDate,
     endDate,
     status,
-    1,
+    0,
   );
 
   //Disclosures
@@ -79,24 +78,23 @@ const AllBookingsPage = () => {
 
   //Handlers
 
-  const handleExportData = () => {
-    console.log("Clicked");
+  const handleExportVisitors = () => {
+    const extension = format === "PDF" ? "pdf" : "xlsx";
 
-    exportBookingsMutation.mutate(
+    exportVisitorsMutation.mutate(
       {
         startDate,
         endDate,
-        status,
-        all: 1,
+        format: format,
+        withPhoto: withPhoto,
       },
       {
         onSuccess: (response) => {
-          console.log("Success");
-          const mimeType = "PDF";
-          //       const mimeType =
-          //         format === "PDF"
-          //           ? "application/pdf"
-          //           : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+          console.log("Seuccess");
+          const mimeType =
+            format === "PDF"
+              ? "application/pdf"
+              : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
           const blob = new Blob([response], { type: mimeType });
 
@@ -104,7 +102,7 @@ const AllBookingsPage = () => {
 
           const link = document.createElement("a");
           link.href = url;
-          link.download = `Bookings_${startDate}-${endDate}.pdf`;
+          link.download = `Visitors_${startDate}-${endDate}.${extension}`;
           document.body.appendChild(link);
           link.click();
           link.remove();
@@ -134,6 +132,7 @@ const AllBookingsPage = () => {
                       setPageNumber={setPageNumber}
                     />
                   </VStack>
+
                   <StatusFilter
                     setPageNumber={setPageNumber}
                     status={status}
@@ -142,18 +141,59 @@ const AllBookingsPage = () => {
                 </HStack>
 
                 <HStack>
-                  <Button
-                    //type="submit"
-                    colorScheme="brand"
-                    //isLoading={authenticateQuery.isPending}
-                    loadingText="Downloading..."
-                    variant="brand"
-                    width="full"
-                    leftIcon={<FaFileDownload />}
-                    onClick={handleExportData}
-                  >
-                    Download
-                  </Button>
+                  <Menu>
+                    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+                      <ModalOverlay />
+                      <ModalContent>
+                        <ModalHeader>Export Options</ModalHeader>
+                        <ModalBody>
+                          <RadioGroup value={withPhoto} onChange={setWithPhoto}>
+                            <VStack align="start">
+                              <Radio value="1">Include Visitor Photos</Radio>
+                              <Radio value="0">Without Photos</Radio>
+                            </VStack>
+                          </RadioGroup>
+                        </ModalBody>
+                        <ModalFooter>
+                          <Button mr={3} onClick={onClose}>
+                            Cancel
+                          </Button>
+                          <Button
+                            colorScheme="blue"
+                            onClick={handleExportVisitors}
+                            variant="brand"
+                          >
+                            Download {format}
+                          </Button>
+                        </ModalFooter>
+                      </ModalContent>
+                    </Modal>
+                    <MenuButton
+                      as={Button}
+                      leftIcon={<FaFileDownload />}
+                      variant="brand"
+                    >
+                      Download
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => {
+                          setFormat("Excel");
+                          onOpen();
+                        }}
+                      >
+                        Excel
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setFormat("PDF");
+                          onOpen();
+                        }}
+                      >
+                        PDF
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                 </HStack>
               </HStack>
 
@@ -173,7 +213,7 @@ const AllBookingsPage = () => {
               </HStack>
 
               {/* Table */}
-              <AllBookingsTableWrapper
+              <VisitorsTableWrapper
                 query={historyQuery}
                 searchText={searchText}
                 pageNumber={pageNumber}
@@ -187,4 +227,4 @@ const AllBookingsPage = () => {
   );
 };
 
-export default AllBookingsPage;
+export default ASADBookingHistoryPage;

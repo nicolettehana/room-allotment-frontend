@@ -63,20 +63,34 @@ const GuestRoutes = () => {
         //overflow="hidden"
       >
         <Center w="full" h="full" p={{ base: 4, md: 15 }}>
-          <Stack
-            w="90%"
-            //maxW="container.xl"
-            //w="90%"
-            h="full"
-            bg={stackBg}
-            borderRadius="xl"
-            //boxShadow="xl"
-            justify="space-between"
-          >
-            <GuestNavbar />
-            <Outlet />
-            <Footer />
-          </Stack>
+          <VStack>
+            <Stack
+              w="full"
+              maxW="container.xl"
+              h="full"
+              bg={stackBg}
+              borderRadius="xl"
+              //boxShadow="xl"
+              justify="space-between"
+            >
+              <GuestNavbar />
+              <Outlet />
+              <Footer />
+            </Stack>
+            <Stack
+              w="full"
+              maxW="container.xl"
+              h="full"
+              bg={stackBg}
+              borderRadius="xl"
+              //boxShadow="xl"
+              justify="space-between"
+            >
+              <GuestNavbar />
+              <Outlet />
+              <Footer />
+            </Stack>
+          </VStack>
         </Center>
       </Container>
     </>
