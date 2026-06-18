@@ -79,8 +79,6 @@ const BookingHistoryPage = () => {
 
   //Handlers
   const handleExportData = () => {
-    console.log("Clicked");
-
     exportBookingsMutation.mutate(
       {
         startDate,
@@ -90,7 +88,7 @@ const BookingHistoryPage = () => {
       },
       {
         onSuccess: (response) => {
-          console.log("Success");
+          //console.log("Success");
           const mimeType = "PDF";
           //       const mimeType =
           //         format === "PDF"

@@ -70,7 +70,6 @@ const CreateHallModal = ({ isOpen, onClose, officeQuery }) => {
 
   // Submit handler
   const onSubmit = (values) => {
-    //console.log(values);
     createHall.mutate(values);
   };
 

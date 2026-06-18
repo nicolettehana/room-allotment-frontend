@@ -106,7 +106,7 @@ const RescheduleTableWrapper = ({
   const queryClient = useQueryClient();
   const getRemark = useGetRemark(
     (response) => {
-      console.log("SUCCESS", response);
+      //console.log("SUCCESS", response);
       setRemark(response?.data?.remark);
       //onClose();
       viewRemarkDisclosure.onOpen();
@@ -210,7 +210,6 @@ const RescheduleTableWrapper = ({
 
   //Handlers
   const getRemarkHandler = (row) => {
-    console.log("form data:", row);
     getRemark.mutate(row);
   };
 

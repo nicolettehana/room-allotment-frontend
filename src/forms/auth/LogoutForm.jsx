@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { useLogoutUser } from "../../hooks/authQueries";
+import { useAuthContext } from "../../components/auth/authContext";
 
 const LogoutForm = ({ isOpen, onClose }) => {
   // Hooks
@@ -21,14 +22,18 @@ const LogoutForm = ({ isOpen, onClose }) => {
   // Routers
   const navigate = useNavigate();
 
+  const { logout } = useAuthContext();
+
   // Queries
   const logoutQuery = useLogoutUser(
     (response) => {
       onClose();
+
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
       localStorage.removeItem("role");
       // localStorage.removeItem("saved_form");
+      logout();
       navigate("/");
       return response;
     },
@@ -44,7 +49,7 @@ const LogoutForm = ({ isOpen, onClose }) => {
           "Oops! something went wrong. Couldn't logout user.",
       });
       return error;
-    }
+    },
   );
 
   return (

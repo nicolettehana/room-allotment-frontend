@@ -80,8 +80,6 @@ const AllBookingsPage = () => {
   //Handlers
 
   const handleExportData = () => {
-    console.log("Clicked");
-
     exportBookingsMutation.mutate(
       {
         startDate,
@@ -91,12 +89,7 @@ const AllBookingsPage = () => {
       },
       {
         onSuccess: (response) => {
-          console.log("Success");
           const mimeType = "PDF";
-          //       const mimeType =
-          //         format === "PDF"
-          //           ? "application/pdf"
-          //           : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
           const blob = new Blob([response], { type: mimeType });
 

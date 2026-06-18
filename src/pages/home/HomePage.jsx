@@ -148,10 +148,6 @@ const HomePage = () => {
                     }}
                   />
                 </FormControl>
-
-                {/* <Heading size="sm">
-                      {profileQuery?.data?.data?.office}
-                    </Heading> */}
               </VStack>
               <OfficeFilter
                 //setPageNumber={setPageNumber}
@@ -161,16 +157,18 @@ const HomePage = () => {
                 setOfficeCode={handleOfficeChange}
               ></OfficeFilter>
             </HStack>
-            <Box position="absolute" left="43%">
-              <Text
-                textAlign="center"
-                fontWeight="bold"
-                fontSize={25}
-                color="brown.800"
-              >
-                Meetings - {formatDate(selectedDate)}
-              </Text>
-            </Box>
+            <Hide below="lg">
+              <Box position="absolute" left="43%">
+                <Text
+                  textAlign="center"
+                  fontWeight="bold"
+                  fontSize={25}
+                  color="brown.800"
+                >
+                  Meetings - {formatDate(selectedDate)}
+                </Text>
+              </Box>
+            </Hide>
           </HStack>
 
           <TimelineScheduler

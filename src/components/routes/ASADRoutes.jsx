@@ -13,6 +13,11 @@ const ASADRoutes = () => {
   const drawer = useDisclosure();
   const { role, isAuthLoading, logout } = useAuthContext();
 
+  console.log({
+    role,
+    isAuthLoading,
+  });
+
   // Only fetch profile after auth is restored and role matches
   const profileQuery = useFetchUsersProfile({
     enabled: !isAuthLoading && role === "ASAD",

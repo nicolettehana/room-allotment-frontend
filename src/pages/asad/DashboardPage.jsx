@@ -36,8 +36,6 @@ import { useFetchOffices } from "../../hooks/officeQueries";
 import OfficeFilter from "../../components/filter/OfficeFilter";
 import YearMonthFilter from "../../components/filter/YearMonthFIlter";
 import PurposeFilter from "../../components/filter/PurposeFilter";
-import VisitorPieChart from "../../components/charts/VisitorPieChart";
-import VisitorsBarChart from "../../components/charts/VisitorsBarChart";
 import StatCard2 from "../../components/core/theme/StatCard2";
 import { Link } from "react-router-dom";
 import { useFetchPendingBookings } from "../../hooks/hallBookingQueries";
@@ -175,7 +173,12 @@ const DashboardPage = () => {
                   ></OfficeFilter>
                 </HStack>
                 <Box position="absolute" left="50%">
-                  <Text textAlign="center" fontWeight="bold" fontSize={25} color="brown.800">
+                  <Text
+                    textAlign="center"
+                    fontWeight="bold"
+                    fontSize={25}
+                    color="brown.800"
+                  >
                     Meetings - {formatDate(selectedDate)}
                   </Text>
                 </Box>

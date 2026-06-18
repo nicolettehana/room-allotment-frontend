@@ -35,11 +35,11 @@ const CancelForm = ({ data, onSuccess }) => {
 
   const takeAction = useTakeAction(
     (response) => {
-      console.log("SUCCESS", response);
+      //console.log("SUCCESS", response);
       queryClient.invalidateQueries({ queryKey: ["history"] });
       navigate("/dept/booking-history");
       //onClose();
-      onSuccess(); 
+      onSuccess();
       toast({
         isClosable: true,
         duration: 3000,
@@ -59,31 +59,27 @@ const CancelForm = ({ data, onSuccess }) => {
         position: "top-right",
         status: "error",
         title: "Error",
-        description:
-          error?.response?.data?.detail || "Error",
+        description: error?.response?.data?.detail || "Error",
       });
       return error;
     },
   );
 
-
   const initialValues = {
     remark: "",
     action: "C",
-    bookingId: data?.bookingId
+    bookingId: data?.bookingId,
   };
 
   const validationSchema = yup.object({
     remark: yup.string(),
     //remarks: yup.string(),
     action: yup.string().required("Action is required"),
-    bookingId: yup.string()
-
+    bookingId: yup.string(),
   });
 
   const onSubmit = (values) => {
     const formData = { ...values };
-    console.log("form data: ", formData);
     takeAction.mutate(formData);
   };
 
@@ -183,13 +179,12 @@ const CancelForm = ({ data, onSuccess }) => {
                 gap={4}
                 mb={5}
               >
-                <Text>  </Text>
-                  <InputField
-                    name="remark"
-                    label="Remark"
-                    placeholder="Enter Remark (if any)"
-                    isRequired={false}
-                  />
+                <InputField
+                  name="remark"
+                  label="Remark"
+                  placeholder="Enter Remark (if any)"
+                  isRequired={false}
+                />
               </SimpleGrid>
 
               <HStack justifyContent="end">

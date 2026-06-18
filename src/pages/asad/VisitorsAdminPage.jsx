@@ -80,7 +80,6 @@ const VisitorsAdminPage = () => {
 
   const handleExportVisitors = () => {
     const extension = format === "PDF" ? "pdf" : "xlsx";
-    console.log("here");
 
     exportVisitorsMutation.mutate(
       {
@@ -109,7 +108,6 @@ const VisitorsAdminPage = () => {
         //   onClose();
         // },
         onSuccess: (response) => {
-          console.log("Seuccess");
           const mimeType =
             format === "PDF"
               ? "application/pdf"

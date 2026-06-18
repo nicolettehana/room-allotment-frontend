@@ -16,12 +16,12 @@ const Footer = () => {
       >
         <VStack>
           <VStack spacing={0}>
-            <Text fontSize="xs" textAlign="center" color="brown.600">
+            <Text fontSize="xs" textAlign="center" color="brown.700">
               Content owned by Secretariat Administration Department, Government
               of Meghalaya
             </Text>
 
-            <Text fontSize="xs" textAlign="center" color="brown.600">
+            <Text fontSize="xs" textAlign="center" color="brown.700">
               Developed and hosted by National Informatics Centre, Meghalaya
             </Text>
           </VStack>

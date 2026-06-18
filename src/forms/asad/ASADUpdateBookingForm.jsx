@@ -75,7 +75,7 @@ const ASADUpdateBookingForm = ({ bookingQuery }) => {
 
   const createBooking = useCreateBooking(
     (response) => {
-      console.log("SUCCESS", response);
+      //console.log("SUCCESS", response);
       //queryClient.invalidateQueries({ queryKey: ["fetch-bookings"] });
       navigate("/asad/my-bookings");
       //onClose();
@@ -208,7 +208,7 @@ const ASADUpdateBookingForm = ({ bookingQuery }) => {
       formData.contactMobileNo = null;
     }
     //formData.password = encryptRSA(formData.password, publicKey);
-    console.log(formData);
+    //console.log(formData);
     createBooking.mutate(formData);
   };
 

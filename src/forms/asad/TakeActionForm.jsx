@@ -35,11 +35,11 @@ const TakeActionForm = ({ data, onSuccess }) => {
 
   const takeAction = useTakeAction(
     (response) => {
-      console.log("SUCCESS", response);
+      //console.log("SUCCESS", response);
       queryClient.invalidateQueries({ queryKey: ["pending-bookings"] });
       navigate("/asad/inbox");
       //onClose();
-      onSuccess(); 
+      onSuccess();
       toast({
         isClosable: true,
         duration: 3000,
@@ -59,31 +59,27 @@ const TakeActionForm = ({ data, onSuccess }) => {
         position: "top-right",
         status: "error",
         title: "Error",
-        description:
-          error?.response?.data?.detail || "Error",
+        description: error?.response?.data?.detail || "Error",
       });
       return error;
     },
   );
 
-
   const initialValues = {
     remark: "",
     action: "",
-    bookingId: data?.bookingId
+    bookingId: data?.bookingId,
   };
 
   const validationSchema = yup.object({
     remark: yup.string(),
     //remarks: yup.string(),
     action: yup.string().required("Action is required"),
-    bookingId: yup.string()
-
+    bookingId: yup.string(),
   });
 
   const onSubmit = (values) => {
     const formData = { ...values };
-    console.log("form data: ", formData);
     takeAction.mutate(formData);
   };
 

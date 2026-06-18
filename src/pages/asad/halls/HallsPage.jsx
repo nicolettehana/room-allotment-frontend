@@ -35,8 +35,6 @@ import { useFetchOffices } from "../../../hooks/officeQueries";
 import OfficeFilter from "../../../components/filter/OfficeFilter";
 import YearMonthFilter from "../../../components/filter/YearMonthFIlter";
 import PurposeFilter from "../../../components/filter/PurposeFilter";
-import VisitorPieChart from "../../../components/charts/VisitorPieChart";
-import VisitorsBarChart from "../../../components/charts/VisitorsBarChart";
 import { Link } from "react-router-dom";
 import { useFetchPendingBookings } from "../../../hooks/hallBookingQueries";
 import {

@@ -190,35 +190,6 @@ const InboxTableWrapper = ({
     );
   }
 
-  const handleTakeAction = () => {
-    // exportVisitorsMutation.mutate(
-    //   {
-    //     startDate,
-    //     endDate,
-    //     format: format,
-    //     withPhoto: withPhoto,
-    //   },
-    //   {
-    //     onSuccess: (response) => {
-    //       console.log("Success");
-    //       const mimeType =
-    //         format === "PDF"
-    //           ? "application/pdf"
-    //           : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    //       const blob = new Blob([response], { type: mimeType });
-    //       const url = window.URL.createObjectURL(blob);
-    //       const link = document.createElement("a");
-    //       link.href = url;
-    //       link.download = `Visitors_${startDate}-${endDate}.${extension}`;
-    //       document.body.appendChild(link);
-    //       link.click();
-    //       link.remove();
-    //       onClose();
-    //     },
-    //   },
-    // );
-  };
-
   return (
     <Stack spacing={4}>
       {selectedVisitorCode && (
@@ -281,7 +252,7 @@ const InboxTableWrapper = ({
                       fadeDuration={index}
                       fontSize="sm"
                     >
-                      {((pageNumber ) * (query?.data?.data?.size || 0))+ index + 1}
+                      {pageNumber * (query?.data?.data?.size || 0) + index + 1}
                       {/* {index + 1} */}
                       {/* {elementCounter(index, query)} */}
                     </SkeletonText>

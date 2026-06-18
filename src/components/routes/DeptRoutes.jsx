@@ -18,6 +18,14 @@ const DeptRoutes = () => {
     enabled: !isAuthLoading && role === "DEPT",
   });
 
+  console.log("DEPT ROUTE", {
+    role,
+    isAuthLoading,
+    pending: profileQuery.isPending,
+    error: profileQuery.isError,
+    data: profileQuery.data,
+  });
+
   // 1️⃣ Still restoring session
   if (isAuthLoading) {
     return (

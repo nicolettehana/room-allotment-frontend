@@ -12,9 +12,9 @@ const timeToMinutes = (time) => {
 
 const EVENT_COLORS = [
   "blue.800",
-  "green.800",
   "purple.800",
   "orange.800",
+  "green.800",
   "pink.800",
 ];
 
@@ -80,12 +80,12 @@ export default function TimelineScheduler({ halls, meetings }) {
 
       {/* Rows */}
       <VStack spacing={0} align="stretch" w="100%">
-        {halls?.map((hall) => {
+        {halls?.map((hall, index) => {
           const hallMeetings = meetings?.filter((m) => m?.hallId === hall?.id);
 
           return (
             <Flex
-              key={hall?.id}
+              key={index}
               h="90px"
               borderTop="1px solid"
               borderColor="gray.200"

@@ -74,7 +74,7 @@ const BookingForm = () => {
 
   const createBooking = useCreateBooking(
     (response) => {
-      console.log("SUCCESS", response);
+      //console.log("SUCCESS", response);
       //queryClient.invalidateQueries({ queryKey: ["fetch-bookings"] });
       navigate("/dept/booking-history");
       //onClose();
@@ -207,7 +207,7 @@ const BookingForm = () => {
       formData.contactMobileNo = null;
     }
     //formData.password = encryptRSA(formData.password, publicKey);
-    console.log(formData);
+
     createBooking.mutate(formData);
   };
 

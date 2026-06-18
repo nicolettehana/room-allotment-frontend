@@ -39,11 +39,11 @@ const GuestRoutes = () => {
   if (profileQuery.isSuccess && profileQuery?.data?.data?.role === "USER")
     return <Navigate to="/user/dashboard" />;
 
-  if (profileQuery.isSuccess && profileQuery?.data?.data?.role === "CH")
-    return <Navigate to="/ch/dashboard" />;
+  if (profileQuery.isSuccess && profileQuery?.data?.data?.role === "DEPT")
+    return <Navigate to="/dept/dashboard" />;
 
   if (profileQuery.isSuccess && profileQuery?.data?.data?.role === "ASAD")
-    return <Navigate to="/asad/visitors" />;
+    return <Navigate to="/asad/dashboard" />;
 
   if (profileQuery.isSuccess && profileQuery?.data?.data?.role === "SAD")
     return <Navigate to="/sad/register" />;
@@ -64,7 +64,7 @@ const GuestRoutes = () => {
       >
         <Center w="full" h="full" p={{ base: 4, md: 15 }}>
           <Stack
-            w="90%"
+            w={{ base: "100%", md: "90%" }}
             //maxW="container.xl"
             //w="90%"
             h="full"

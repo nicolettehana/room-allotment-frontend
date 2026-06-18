@@ -94,10 +94,10 @@ import { useAuthContext } from "../components/auth/authContext";
  * ----------------------------
  */
 export const useFetchUsersProfile = ({ enabled = true } = {}) => {
-  const { axiosClient } = useAuthContext();
+  const { axiosClient, role } = useAuthContext();
 
   return useQuery({
-    queryKey: ["fetch-users-profile"],
+    queryKey: ["fetch-users-profile", role],
     queryFn: async () => {
       const response = await axiosClient.get("/users/profile");
       return response.data;
