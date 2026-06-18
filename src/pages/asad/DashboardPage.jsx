@@ -42,6 +42,8 @@ import { useFetchPendingBookings } from "../../hooks/hallBookingQueries";
 import TimelineScheduler from "../../components/charts/TimelineScheduler";
 import { useFetchHalls } from "../../hooks/roomQueries";
 import { useFetchHallAllotments } from "../../hooks/hallBookingQueries";
+import { useFetchHistory } from "../../hooks/hallBookingQueries";
+import BookingsTableWrapper from "./BookingsTableWrapper";
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-GB", {
@@ -71,7 +73,7 @@ const DashboardPage = () => {
     dayjs().subtract(2, "months").startOf("M").format("YYYY-MM-DD"),
   );
   const [endDate, setEndDate] = useState(
-    dayjs().startOf("day").format("YYYY-MM-DD"),
+    dayjs().add(6, "months").startOf("day").format("YYYY-MM-DD"),
   );
   const { role } = useAuth();
 
@@ -87,6 +89,16 @@ const DashboardPage = () => {
   const hallAllotmentQuery = useFetchHallAllotments(selectedDate, officeCode);
 
   const exportVisitorsMutation = useExportVisitors();
+
+  const allottedQuery = useFetchHistory(
+    searchValue,
+    0,
+    50,
+    dayjs().subtract(1, "days").startOf("day").format("YYYY-MM-DD"),
+    endDate,
+    2,
+    1,
+  );
 
   //Disclosures
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -189,6 +201,26 @@ const DashboardPage = () => {
                 meetings={hallAllotmentQuery?.data?.data}
               />
             </Stack>
+            {allottedQuery?.data?.data?.content?.length > 0 && (
+              <Box
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="lg"
+                boxShadow="md"
+                p={5}
+                bg="brown.50"
+                my={8}
+              >
+                <Heading size="sm" pb={2} color="green.600">
+                  Upcoming Meetings
+                </Heading>
+                <BookingsTableWrapper
+                  query={allottedQuery}
+                  pageNumber={0}
+                  setPageNumber={setPageNumber}
+                ></BookingsTableWrapper>
+              </Box>
+            )}
           </Container>
         </Section>
       </Main>

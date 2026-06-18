@@ -28,6 +28,7 @@ import {
   ModalCloseButton,
   useDisclosure,
   Heading,
+  Hide,
 } from "@chakra-ui/react";
 import InputField from "../../components/core/formik/InputField";
 import SelectField from "../../components/core/formik/SelectField";
@@ -44,6 +45,7 @@ import { useFetchHalls } from "../../hooks/roomQueries";
 import { useCreateBooking } from "../../hooks/hallBookingQueries";
 import { useGetPublicKey } from "../../hooks/authQueries";
 import { encryptRSA } from "../../components/utils/security";
+import { IoInformationCircle } from "react-icons/io5";
 
 const timeOptions = [];
 
@@ -119,6 +121,9 @@ const ASADUpdateBookingForm = ({ bookingQuery }) => {
     hallOfficeCode: bookingQuery?.hallOfficeCode || "",
     hallId: bookingQuery?.hallId || "",
     contactDesignation: bookingQuery?.contactDesignation || "",
+    requireNet: bookingQuery?.requireNet ?? null,
+    vc: bookingQuery?.vc ?? null,
+    refreshments: bookingQuery?.refreshments ?? null,
   };
 
   const validationSchema = yup.object({
@@ -189,6 +194,7 @@ const ASADUpdateBookingForm = ({ bookingQuery }) => {
     contactDesignation: yup.string(),
     hallOfficeCode: yup.number(),
     hallId: yup.number(),
+    requireNet: yup.number(),
   });
 
   // Submit handler
@@ -222,143 +228,281 @@ const ASADUpdateBookingForm = ({ bookingQuery }) => {
       {(formik) => {
         return (
           <Stack as={Form} spacing={8}>
-            <Heading size="sm">{profileQuery?.data?.data?.office}</Heading>
+            {/* <Heading size="sm">{profileQuery?.data?.data?.office}</Heading> */}
+            <Box
+              position="sticky"
+              top="0"
+              zIndex="1000"
+              bg="brown.300"
+              borderBottom="1px solid"
+              borderColor="blue.200"
+              p={3}
+              mb={5}
+              w="fit-content"
+              mx="auto"
+            >
+              <HStack>
+                <IoInformationCircle />
+                <Text fontSize="sm" fontWeight="medium" textAlign="center">
+                  NIC VC can only be conducted in Conference Room II,
+                  Secretariat.
+                </Text>
+              </HStack>
+            </Box>
 
             {/* Top Form Fields */}
             {/* <Text fontWeight="bold" fontSize="lg">Applicant Details:</Text> */}
             <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-              <InputField
-                name="department"
-                label="Department/Office"
-                placeholder="Enter Department"
-                isReadOnly={true}
-              />
-
-              <InputField
-                name="purpose"
-                label="Purpose of Meeting"
-                placeholder="Enter Meeting Purpose"
-              />
-
-              <SelectFieldSearchable
-                name="hallOfficeCode"
-                label="Building"
-                placeholder="Select Building"
-                onChange={(option) => {
-                  const officeCode = option?.value;
-
-                  setSelectedOffice(officeCode);
-                  formik.setFieldValue("hallOfficeCode", officeCode);
-                  formik.setFieldValue("hallId", "");
-                }}
-                options={
-                  officesQuery?.data?.data?.map((row) => ({
-                    value: row.officeCode,
-                    label: row.officeName,
-                  })) || []
-                }
-              />
-
-              <SelectFieldSearchable
-                name="hallId"
-                label="Hall"
-                placeholder="Select Hall"
-                options={
-                  hallsQuery?.data?.data?.map((hall) => ({
-                    value: hall.id,
-                    label: hall.name,
-                  })) || []
-                }
-              />
-
-              <InputField name="meetingDate" label="Meeting Date" type="date" />
-
-              <SimpleGrid
-                templateColumns={{ base: "1fr", md: "2fr 2fr" }}
-                gap={4}
-              >
-                {/* <SelectFieldSearchable
-                  name="startTime"
-                  label="Start Time"
-                  options={timeOptions}
-                /> */}
-
-                <SelectFieldSearchable
-                  name="startTime"
-                  label="Start Time of meeting"
-                  placeholder="Select Start Time"
-                  options={timeOptions}
-                />
-
-                {/* <InputField
-                  name="startTime"
-                  label="Start Time of meeting"
-                  type="time"
-                  step={900}
-                  fontSize="sm"
-                /> */}
-                {/* <InputField
-                  name="endTime"
-                  label="End Time of meeting"
-                  type="time"
-                  fontSize="sm"
-                /> */}
-                <SelectFieldSearchable
-                  name="endTime"
-                  label="End Time of meeting"
-                  placeholder="Select End Time"
-                  options={timeOptions}
-                />
-              </SimpleGrid>
-
-              <InputField
-                name="noOfAttendees"
-                label="No. of attendees (Optional)"
-                placeholder="Enter no. of attendees"
-                isRequired={false}
-              />
-
-              <InputField
-                name="remarks"
-                label="Additional Remarks (Optional)"
-                placeholder="Enter remarks (if any)"
-                isRequired={false}
-              />
-
-              <Box gridColumn={{ md: "span 2" }} mt={8}></Box>
-              <Heading size="sm" gridColumn={{ md: "span 2" }}>
-                Contact Person Details
-              </Heading>
-
-              <SimpleGrid
-                columns={{ base: 1, md: 3 }}
-                gap={4}
+              <Box
                 gridColumn={{ md: "span 2" }}
+                borderWidth="1px"
+                borderRadius="lg"
+                p={6}
+                bg="brown.50"
+                shadow="md"
               >
-                <InputField
-                  name="contactName"
-                  label="Name"
-                  placeholder="Enter Name"
-                  isRequired={false}
-                />
-                <InputField
-                  name="contactDesignation"
-                  label="Designation"
-                  placeholder="Enter Designation"
-                  isRequired={false}
-                />
-                <InputField
-                  name="contactMobileNo"
-                  label="Mobile No."
-                  placeholder="Enter Mobile no."
-                  isRequired={false}
-                  onChange={(e) => {
-                    let val = e.target.value.replace(/\D/g, ""); // only digits
-                    if (val.length > 10) val = val.slice(0, 10);
-                    formik.setFieldValue("contactMobileNo", val);
-                  }}
-                />
-              </SimpleGrid>
+                <Box
+                  px={6}
+                  p={3}
+                  bg="brown.700"
+                  color="white"
+                  borderBottom="1px solid"
+                  borderColor="gray.200"
+                  display="inline-block"
+                  borderRadius="lg"
+                  mb={3}
+                >
+                  <Heading size="sm">Meeting Details</Heading>
+                </Box>
+                <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
+                  <InputField
+                    name="purpose"
+                    label="Purpose of Meeting"
+                    placeholder="Enter Meeting Purpose"
+                  />
+
+                  <SimpleGrid
+                    templateColumns={{ base: "1fr", md: "2fr 2fr" }}
+                    gap={4}
+                  >
+                    <SelectFieldSearchable
+                      name="hallOfficeCode"
+                      label="Building"
+                      placeholder="Select Building"
+                      onChange={(option) => {
+                        const officeCode = option?.value;
+
+                        setSelectedOffice(officeCode);
+                        formik.setFieldValue("hallOfficeCode", officeCode);
+                        formik.setFieldValue("hallId", "");
+                      }}
+                      options={
+                        officesQuery?.data?.data?.map((row) => ({
+                          value: row.officeCode,
+                          label: row.officeName,
+                        })) || []
+                      }
+                    />
+                    <SelectFieldSearchable
+                      name="hallId"
+                      label="Hall"
+                      placeholder="Select Hall"
+                      options={
+                        hallsQuery?.data?.data?.map((hall) => ({
+                          value: hall.id,
+                          label: hall.name,
+                        })) || []
+                      }
+                    />
+                  </SimpleGrid>
+
+                  <SimpleGrid
+                    templateColumns={{ base: "1fr", md: "2fr 2fr 2fr" }}
+                    gap={4}
+                  >
+                    <InputField
+                      name="meetingDate"
+                      label="Meeting Date"
+                      type="date"
+                    />
+                    <SelectFieldSearchable
+                      name="startTime"
+                      label="Start Time of meeting"
+                      placeholder="Start Time"
+                      options={timeOptions}
+                    />
+                    <SelectFieldSearchable
+                      name="endTime"
+                      label="End Time of meeting"
+                      placeholder="End Time"
+                      options={timeOptions}
+                    />
+                  </SimpleGrid>
+                  <SimpleGrid
+                    templateColumns={{ base: "1fr", md: "2fr 4fr" }}
+                    gap={4}
+                  >
+                    <InputField
+                      name="noOfAttendees"
+                      label="No. of attendees"
+                      placeholder="Enter no. of attendees"
+                      isRequired={false}
+                    />
+                    <InputField
+                      name="remarks"
+                      label="Additional Remarks (Optional)"
+                      placeholder="Enter remarks (if any)"
+                      isRequired={false}
+                    />
+                  </SimpleGrid>
+                </SimpleGrid>
+              </Box>
+
+              <Box
+                gridColumn={{ md: "span 2" }}
+                borderWidth="1px"
+                borderRadius="lg"
+                p={6}
+                mt={8}
+                bg="brown.50"
+                shadow="md"
+              >
+                <Box
+                  px={6}
+                  p={3}
+                  bg="brown.700"
+                  color="white"
+                  borderBottom="1px solid"
+                  borderColor="gray.200"
+                  display="inline-block"
+                  borderRadius="lg"
+                  mb={3}
+                >
+                  <Heading size="sm">Additional Requirements</Heading>
+                </Box>
+                <SimpleGrid
+                  templateColumns={{ base: "1fr", md: "2fr 2fr 2fr" }}
+                  gap={4}
+                >
+                  <SelectFieldSearchable
+                    name="requireNet"
+                    label="Require Internet/Projector"
+                    placeholder="Select Option"
+                    isRequired={false}
+                    onChange={(option) => {
+                      formik.setFieldValue("requireNet", option?.value);
+                    }}
+                    options={[
+                      {
+                        value: 1,
+                        label: "Yes",
+                      },
+                      {
+                        value: 0,
+                        label: "No",
+                      },
+                    ]}
+                  />
+
+                  <SelectFieldSearchable
+                    name="vc"
+                    label="Video Conference"
+                    placeholder="Select Option"
+                    isRequired={false}
+                    onChange={(option) => {
+                      formik.setFieldValue("vc", option?.value);
+                    }}
+                    options={[
+                      {
+                        value: 1,
+                        label: "Yes",
+                      },
+                      {
+                        value: 0,
+                        label: "No",
+                      },
+                    ]}
+                  />
+                  <SelectFieldSearchable
+                    name="refreshments"
+                    label="Refreshments"
+                    placeholder="Select Option"
+                    isRequired={false}
+                    onChange={(option) => {
+                      formik.setFieldValue("refreshmentst", option?.value);
+                    }}
+                    options={[
+                      {
+                        value: 1,
+                        label: "Yes",
+                      },
+                      {
+                        value: 0,
+                        label: "No",
+                      },
+                    ]}
+                  />
+                </SimpleGrid>
+              </Box>
+
+              <Box
+                gridColumn={{ md: "span 2" }}
+                borderWidth="1px"
+                borderRadius="lg"
+                p={6}
+                mt={8}
+                bg="brown.50"
+                shadow="md"
+              >
+                <Box
+                  px={6}
+                  py={3}
+                  bg="brown.700"
+                  color="white"
+                  borderBottom="1px solid"
+                  borderColor="gray.200"
+                  display="inline-block"
+                  borderRadius="lg"
+                  mb={3}
+                >
+                  <Heading size="sm">Contact Person Details</Heading>
+                </Box>
+
+                <SimpleGrid
+                  columns={{ base: 1, md: 4 }}
+                  gap={4}
+                  gridColumn={{ md: "span 2" }}
+                >
+                  <InputField
+                    name="contactName"
+                    label="Name"
+                    placeholder="Enter Name"
+                    isRequired={false}
+                  />
+                  <InputField
+                    name="contactDesignation"
+                    label="Designation"
+                    placeholder="Enter Designation"
+                    isRequired={false}
+                  />
+                  <InputField
+                    name="department"
+                    label="Department/Office"
+                    placeholder="Enter Department"
+                  />
+                  <InputField
+                    name="contactMobileNo"
+                    label="Mobile No."
+                    placeholder="Enter Mobile no."
+                    isRequired={false}
+                    onChange={(e) => {
+                      let val = e.target.value.replace(/\D/g, ""); // only digits
+                      if (val.length > 10) val = val.slice(0, 10);
+                      formik.setFieldValue("contactMobileNo", val);
+                    }}
+                  />
+                </SimpleGrid>
+              </Box>
             </SimpleGrid>
 
             {/* Submit Buttons */}

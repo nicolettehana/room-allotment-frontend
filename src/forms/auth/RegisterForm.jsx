@@ -64,7 +64,7 @@ const RegisterForm = () => {
       });
 
       return error;
-    }
+    },
   );
 
   // Formik
@@ -144,7 +144,7 @@ const RegisterForm = () => {
     if (captchaQuery.isSuccess) {
       formikRef.current.setFieldValue(
         "captchaToken",
-        captchaQuery?.data?.data?.captchaToken
+        captchaQuery?.data?.data?.captchaToken,
       );
     }
   }, [captchaQuery?.data?.data?.captchaToken]);

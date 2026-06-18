@@ -9,7 +9,7 @@ import {
   Th,
   Thead,
   Tr,
-} from "../../../components/core/Table";
+} from "../../components/core/Table";
 import {
   Badge,
   Box,
@@ -28,15 +28,6 @@ import {
   useDisclosure,
   useToast,
   VStack,
-  Modal,
-  ModalBody,
-  ModalFooter,
-  ModalContent,
-  ModalOverlay,
-  ModalHeader,
-  RadioGroup,
-  Radio,
-  SelectField,
 } from "@chakra-ui/react";
 import {
   MdOutlineInfo,
@@ -49,9 +40,12 @@ import { useNavigate } from "react-router-dom";
 import { IoDocumentText } from "react-icons/io5";
 import { CgProfile } from "react-icons/cg";
 import dayjs from "dayjs";
-import { MdNavigateNext } from "react-icons/md";
-import TakeActionModal from "./TakeActionModal";
-import { AiOutlineFileSearch } from "react-icons/ai";
+import { TiCancel } from "react-icons/ti";
+import { FaEdit } from "react-icons/fa";
+import { GrFormView } from "react-icons/gr";
+import ViewRemarkModal from "./myBookings/ViewRemarkModal";
+import CancelModal from "./myBookings/CancelModal";
+import { useGetRemark } from "../../hooks/hallBookingQueries";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -85,7 +79,7 @@ const getStatusColorScheme = (status) => {
   }
 };
 
-const InboxTableWrapper = ({
+const BookingsTableWrapper = ({
   isEstate = true,
   query,
   searchText,
@@ -95,19 +89,43 @@ const InboxTableWrapper = ({
   // States
   const [rowState, setRowState] = useState({});
   const [selectedVisitorId, setSelectedVisitorId] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedVisitorCode, setSelectedVisitorCode] = useState(null);
   const [selectedVPassNo, setSelectedVPassNo] = useState(null);
-  const [withPhoto, setWithPhoto] = useState(0);
+  const [remark, setRemark] = useState(null);
 
   // Hooks
   const toast = useToast();
   const navigate = useNavigate();
 
   //Disclosures
-  const takeActionDisclosure = useDisclosure();
+  const viewRemarkDisclosure = useDisclosure();
+  const cancelDisclosure = useDisclosure();
 
   // Queries
   const queryClient = useQueryClient();
+  const getRemark = useGetRemark(
+    (response) => {
+      //console.log("SUCCESS", response);
+      setRemark(response?.data?.remark);
+      //onClose();
+      viewRemarkDisclosure.onOpen();
+      //onSuccess();
+      return response;
+    },
+    (error) => {
+      console.log("ERROR", error);
+      toast({
+        isClosable: true,
+        duration: 3000,
+        position: "top-right",
+        status: "error",
+        title: "Error",
+        description: error?.response?.data?.detail || "Error",
+      });
+      return error;
+    },
+  );
 
   if (query.isError) {
     return (
@@ -152,13 +170,13 @@ const InboxTableWrapper = ({
             rounded="full"
             p={4}
           >
-            <AiOutlineFileSearch size={48} />
+            <MdOutlineSearch size={48} />
           </Box>
 
           <VStack>
             <Heading size="md">No data</Heading>
             <Text color="body" textAlign="center">
-              No pending requests
+              No data related to "{searchText}"
             </Text>
           </VStack>
         </VStack>
@@ -190,51 +208,33 @@ const InboxTableWrapper = ({
     );
   }
 
+  //Handlers
+  const getRemarkHandler = (row) => {
+    getRemark.mutate(row);
+  };
+
   return (
     <Stack spacing={4}>
-      {selectedVisitorCode && (
-        <VisitorPassModal
-          visitorCode={selectedVisitorCode}
-          vPassNo={selectedVPassNo}
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            setSelectedVisitorCode(null);
-          }}
-        />
-      )}
-      {selectedVisitorId && (
-        <VisitorPhotoModal
-          visitorCode={selectedVisitorId}
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            setSelectedVisitorId(null); // reset for next use
-          }}
-        />
-      )}
-
-      <TakeActionModal
-        isOpen={takeActionDisclosure.isOpen}
-        onClose={takeActionDisclosure.onClose}
+      <ViewRemarkModal
+        isOpen={viewRemarkDisclosure.isOpen}
+        onClose={viewRemarkDisclosure.onClose}
+        data={remark}
+      />
+      <CancelModal
+        isOpen={cancelDisclosure.isOpen}
+        onClose={cancelDisclosure.onClose}
         data={rowState}
       />
-
       {/* Table */}
       <TableContainer>
         <Table>
           <Thead>
             <Tr>
-              <Th>Sl. No.</Th>
               <Th>Booking ID.</Th>
-              <Th>Department/Office</Th>
               <Th>Purpose</Th>
               <Th>Date & Time</Th>
               <Th>Hall</Th>
-              <Th>Requirements</Th>
-              <Th>No. of Attendees</Th>
-              <Th>Remarks</Th>
-              <Th>Contact Person Details</Th>
+              <Th>Status</Th>
               <Th>Action</Th>
             </Tr>
           </Thead>
@@ -246,23 +246,7 @@ const InboxTableWrapper = ({
               return (
                 <Tr key={index}>
                   <Td>
-                    <SkeletonText
-                      w="8"
-                      noOfLines={1}
-                      isLoaded={!query.isPending}
-                      fadeDuration={index}
-                      fontSize="sm"
-                    >
-                      {pageNumber * (query?.data?.data?.size || 0) + index + 1}
-                      {/* {index + 1} */}
-                      {/* {elementCounter(index, query)} */}
-                    </SkeletonText>
-                  </Td>
-                  <Td>
                     <Text fontSize="sm">{row?.bookingId}</Text>
-                  </Td>
-                  <Td>
-                    <Text fontSize="sm">{row?.department}</Text>
                   </Td>
                   <Td>
                     <Text fontSize="sm">{row?.purpose}</Text>
@@ -296,64 +280,99 @@ const InboxTableWrapper = ({
                     </Text>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">
-                      <Text as="span" fontWeight="bold">
-                        Internet:
-                      </Text>{" "}
-                      {row?.requireNet === 0
-                        ? "No"
-                        : row?.requireNet === 1
-                          ? "Yes"
-                          : "-"}
-                    </Text>
-                    <Text fontSize="sm">
-                      <Text as="span" fontWeight="bold">
-                        VC:
-                      </Text>{" "}
-                      {row?.vc === 0 ? "No" : row?.vc === 1 ? "Yes" : "-"}
-                    </Text>
-                    <Text fontSize="sm">
-                      <Text as="span" fontWeight="bold">
-                        Refreshments:
-                      </Text>{" "}
-                      {row?.refreshments === 0
-                        ? "No"
-                        : row?.refreshments === 1
-                          ? "Yes"
-                          : "-"}
-                    </Text>
+                    <Badge
+                      colorScheme={getStatusColorScheme(row?.status)}
+                      size="sm"
+                    >
+                      {row?.status}
+                    </Badge>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">{row?.noOfAttendees}</Text>
-                  </Td>
-
-                  <Td>
-                    <Text fontSize="sm">{row?.remarks}</Text>
-                  </Td>
-                  <Td>
-                    <Text fontSize="sm">
-                      {row?.contactName}
-                      <br />
-                      {row?.contactDesignation}
-                      <br />
-                      {row?.contactMobileNo}
-                    </Text>
-                  </Td>
-                  <Td>
-                    <VStack>
+                    <VStack align="stretch">
                       {row?.appStatus === 1 && (
                         <Button
                           variant="brand"
                           colorScheme="brand"
                           minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<FaEdit />}
                           onClick={() => {
                             setRowState(row);
-                            takeActionDisclosure.onOpen();
+                            navigate("/asad/my-bookings/update-booking", {
+                              state: { bookingQuery: row },
+                            });
                           }}
-                          size="xs"
-                          rightIcon={<MdNavigateNext />}
                         >
-                          Take Action
+                          Edit
+                        </Button>
+                      )}
+                      {row?.appStatus === 2 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/asad/my-bookings/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
+                        >
+                          Reschedule
+                        </Button>
+                      )}
+                      {row?.appStatus !== 4 && row?.appStatus !== 5 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<TiCancel />}
+                          onClick={() => {
+                            setRowState(row);
+                            cancelDisclosure.onOpen();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                      {(row?.appStatus === 4 || row?.appStatus === 3) && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<GrFormView />}
+                          onClick={() => {
+                            setRowState(row);
+                            getRemarkHandler(row);
+                          }}
+                        >
+                          View Remark
+                        </Button>
+                      )}
+                      {row?.appStatus === 3 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/asad/my-bookings/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
+                        >
+                          Edit
                         </Button>
                       )}
                     </VStack>
@@ -366,13 +385,13 @@ const InboxTableWrapper = ({
       </TableContainer>
 
       {/* Pagination */}
-      <Pagination
+      {/* <Pagination
         query={query}
         pageNumber={pageNumber}
         setPageNumber={setPageNumber}
-      />
+      /> */}
     </Stack>
   );
 };
 
-export default InboxTableWrapper;
+export default BookingsTableWrapper;

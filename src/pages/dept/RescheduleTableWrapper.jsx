@@ -307,6 +307,24 @@ const RescheduleTableWrapper = ({
                           Edit
                         </Button>
                       )}
+                      {row?.appStatus === 2 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/dept/booking-history/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
+                        >
+                          Reschedule
+                        </Button>
+                      )}
                       {row?.appStatus !== 4 && row?.appStatus !== 5 && (
                         <Button
                           variant="brand"

@@ -95,6 +95,7 @@ const DashboardPage = () => {
     startDate,
     endDate,
     3,
+    0,
   );
   const allottedQuery = useFetchHistory(
     searchValue,
@@ -103,6 +104,7 @@ const DashboardPage = () => {
     dayjs().subtract(1, "days").startOf("day").format("YYYY-MM-DD"),
     endDate,
     2,
+    0,
   );
   const rejectedQuery = useFetchHistory(
     searchValue,
@@ -111,6 +113,17 @@ const DashboardPage = () => {
     dayjs().startOf("day").format("YYYY-MM-DD"),
     endDate,
     4,
+    0,
+  );
+
+  const pendingQuery = useFetchHistory(
+    searchValue,
+    0,
+    50,
+    dayjs().startOf("day").format("YYYY-MM-DD"),
+    endDate,
+    1,
+    0,
   );
 
   const exportVisitorsMutation = useExportVisitors();
@@ -203,6 +216,26 @@ const DashboardPage = () => {
                 </Heading>
                 <RescheduleTableWrapper
                   query={rescheduleQuery}
+                  pageNumber={0}
+                  setPageNumber={setPageNumber}
+                ></RescheduleTableWrapper>
+              </Box>
+            )}
+            {pendingQuery?.data?.data?.content?.length > 0 && (
+              <Box
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="lg"
+                boxShadow="md"
+                p={5}
+                bg="brown.50"
+                mb={2}
+              >
+                <Heading size="sm" py={2} color="blue.600">
+                  Pending Bookings
+                </Heading>
+                <RescheduleTableWrapper
+                  query={pendingQuery}
                   pageNumber={0}
                   setPageNumber={setPageNumber}
                 ></RescheduleTableWrapper>

@@ -102,7 +102,7 @@ const TakeActionForm = ({ data, onSuccess }) => {
                 borderColor="gray.200"
                 borderRadius="md"
                 p={4}
-                bg="brown.100"
+                bg="brown.200"
               >
                 <Text fontSize="md">
                   <Text as="span" fontWeight="bold">
@@ -153,6 +153,24 @@ const TakeActionForm = ({ data, onSuccess }) => {
                   </Text>{" "}
                   {data.hallName}, {data.buildingName}
                 </Text>
+                <Text fontSize="sm">
+                  <Text as="span" fontWeight="bold">
+                    Require Internet/Projector:
+                  </Text>{" "}
+                  {data?.requireNet === 0 ? "No" : "Yes"}
+                  <Text fontSize="sm">
+                    <Text as="span" fontWeight="bold">
+                      Require VC:
+                    </Text>{" "}
+                    {data?.vc === 0 ? "No" : "Yes"}
+                  </Text>
+                  <Text fontSize="sm">
+                    <Text as="span" fontWeight="bold">
+                      Require Refreshements:
+                    </Text>{" "}
+                    {data?.refreshments === 0 ? "No" : "Yes"}
+                  </Text>
+                </Text>
                 <Text fontSize="md">
                   <Text as="span" fontWeight="bold">
                     No. of attendees:
@@ -186,7 +204,7 @@ const TakeActionForm = ({ data, onSuccess }) => {
                 >
                   <option value="A">Allot</option>
                   <option value="R">Reject</option>
-                  <option value="S">Reschedule</option>
+                  <option value="S">Request Applicant to Reschedule</option>
                 </SelectField>
                 {(formik.values.action === "R" ||
                   formik.values.action === "S") && (

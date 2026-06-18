@@ -211,6 +211,7 @@ const AllBookingsTableWrapper = ({
               <Th>Purpose</Th>
               <Th>Date & Time</Th>
               <Th>Hall</Th>
+              <Th>Requirements</Th>
               <Th>No. of Attendees</Th>
               <Th>Status</Th>
               {/* <Th>Action</Th> */}
@@ -233,7 +234,7 @@ const AllBookingsTableWrapper = ({
                       fadeDuration={index}
                       fontSize="sm"
                     >
-                      {((pageNumber ) * (query?.data?.data?.size || 0))+ index + 1}
+                      {pageNumber * (query?.data?.data?.size || 0) + index + 1}
                       {/* {index + 1} */}
                       {/* {elementCounter(index, query)} */}
                     </SkeletonText>
@@ -273,6 +274,34 @@ const AllBookingsTableWrapper = ({
                       {row?.buildingName}
                       <br />
                       {row?.hallName}
+                    </Text>
+                  </Td>
+                  <Td>
+                    <Text fontSize="sm">
+                      <Text as="span" fontWeight="bold">
+                        Internet:
+                      </Text>{" "}
+                      {row?.requireNet === 0
+                        ? "No"
+                        : row?.requireNet === 1
+                          ? "Yes"
+                          : "-"}
+                    </Text>
+                    <Text fontSize="sm">
+                      <Text as="span" fontWeight="bold">
+                        VC:
+                      </Text>{" "}
+                      {row?.vc === 0 ? "No" : row?.vc === 1 ? "Yes" : "-"}
+                    </Text>
+                    <Text fontSize="sm">
+                      <Text as="span" fontWeight="bold">
+                        Refreshments:
+                      </Text>{" "}
+                      {row?.refreshments === 0
+                        ? "No"
+                        : row?.refreshments === 1
+                          ? "Yes"
+                          : "-"}
                     </Text>
                   </Td>
                   <Td>

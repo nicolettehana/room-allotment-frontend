@@ -258,6 +258,7 @@ const BookingHistoryTableWrapper = ({
               <Th>Purpose</Th>
               <Th>Date & Time</Th>
               <Th>Hall</Th>
+              <Th>Requirements</Th>
               <Th>No. of Attendees</Th>
               <Th>Status</Th>
               <Th>Action</Th>
@@ -320,8 +321,37 @@ const BookingHistoryTableWrapper = ({
                     </Text>
                   </Td>
                   <Td>
+                    <Text fontSize="sm">
+                      <Text as="span" fontWeight="bold">
+                        Internet:
+                      </Text>{" "}
+                      {row?.requireNet === 0
+                        ? "No"
+                        : row?.requireNet === 1
+                          ? "Yes"
+                          : "-"}
+                    </Text>
+                    <Text fontSize="sm">
+                      <Text as="span" fontWeight="bold">
+                        VC:
+                      </Text>{" "}
+                      {row?.vc === 0 ? "No" : row?.vc === 1 ? "Yes" : "-"}
+                    </Text>
+                    <Text fontSize="sm">
+                      <Text as="span" fontWeight="bold">
+                        Refreshments:
+                      </Text>{" "}
+                      {row?.refreshments === 0
+                        ? "No"
+                        : row?.refreshments === 1
+                          ? "Yes"
+                          : "-"}
+                    </Text>
+                  </Td>
+                  <Td>
                     <Text fontSize="sm">{row?.noOfAttendees}</Text>
                   </Td>
+
                   <Td>
                     <Badge
                       colorScheme={getStatusColorScheme(row?.status)}

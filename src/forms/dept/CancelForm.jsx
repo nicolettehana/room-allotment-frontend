@@ -102,7 +102,7 @@ const CancelForm = ({ data, onSuccess }) => {
                 borderColor="gray.200"
                 borderRadius="md"
                 p={4}
-                bg="brown.100"
+                bg="brown.200"
               >
                 <Text fontSize="md">
                   <Text as="span" fontWeight="bold">
@@ -152,6 +152,24 @@ const CancelForm = ({ data, onSuccess }) => {
                     Hall:
                   </Text>{" "}
                   {data.hallName}, {data.buildingName}
+                </Text>
+                <Text fontSize="sm">
+                  <Text as="span" fontWeight="bold">
+                    Require Internet/Projector:
+                  </Text>{" "}
+                  {data?.requireNet === 0 ? "No" : "Yes"}
+                  <Text fontSize="sm">
+                    <Text as="span" fontWeight="bold">
+                      Require VC:
+                    </Text>{" "}
+                    {data?.vc === 0 ? "No" : "Yes"}
+                  </Text>
+                  <Text fontSize="sm">
+                    <Text as="span" fontWeight="bold">
+                      Require Refreshements:
+                    </Text>{" "}
+                    {data?.refreshments === 0 ? "No" : "Yes"}
+                  </Text>
                 </Text>
                 <Text fontSize="md">
                   <Text as="span" fontWeight="bold">
