@@ -72,6 +72,7 @@ const AllBookingsPage = () => {
     endDate,
     status,
     1,
+    "DESC"
   );
 
   //Disclosures

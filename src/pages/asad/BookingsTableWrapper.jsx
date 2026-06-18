@@ -243,16 +243,20 @@ const BookingsTableWrapper = ({
               ? new Array(10).fill(null)
               : query?.data?.data?.content
             )?.map((row, index) => {
+              const isToday = dayjs(row?.meetingDate).isSame(dayjs(), "day");
               return (
-                <Tr key={index}>
+                <Tr key={index} bg={isToday ? "brown.200 !important" : undefined}>
                   <Td>
-                    <Text fontSize="sm">{row?.bookingId}</Text>
+                    <Text fontSize="sm" fontWeight={isToday ? "bold" : undefined}>{row?.bookingId}</Text>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">{row?.purpose}</Text>
+                    <Text fontSize="sm" fontWeight={isToday ? "bold" : undefined}>{row?.purpose}</Text>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">
+                    <Text
+                      fontSize="sm"
+                      fontWeight={isToday ? "bold" : undefined}
+                    >
                       {new Date(row?.meetingDate)
                         .toLocaleDateString("en-GB")
                         .replace(/\//g, "-")}
@@ -273,7 +277,7 @@ const BookingsTableWrapper = ({
                     </Text>
                   </Td>
                   <Td>
-                    <Text fontSize="sm">
+                    <Text fontSize="sm" fontWeight={isToday ? "bold" : undefined}>
                       {row?.buildingName}
                       <br />
                       {row?.hallName}

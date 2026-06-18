@@ -98,6 +98,7 @@ const DashboardPage = () => {
     endDate,
     2,
     1,
+    "ASC"
   );
 
   //Disclosures

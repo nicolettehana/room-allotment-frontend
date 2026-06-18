@@ -72,6 +72,7 @@ const BookingHistoryPage = () => {
     endDate,
     status,
     0,
+    "DESC"
   );
 
   //Disclosures

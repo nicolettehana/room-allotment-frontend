@@ -34,9 +34,10 @@ const fetchHistory = (
   endDate,
   status,
   all,
+  order
 ) => {
   return axiosClient.get(
-    `/booking?page=${pageNumber}&size=${pageSize}&search=${searchValue}&startDate=${startDate}&endDate=${endDate}&status=${status}&all=${all}`,
+    `/booking?page=${pageNumber}&size=${pageSize}&search=${searchValue}&startDate=${startDate}&endDate=${endDate}&status=${status}&all=${all}&order=${order}`,
   );
 };
 
@@ -48,6 +49,7 @@ export const useFetchHistory = (
   endDate,
   status,
   all,
+  order,
 ) => {
   const { axiosClient } = useAuthContext();
 
@@ -61,6 +63,7 @@ export const useFetchHistory = (
       endDate,
       status,
       all,
+      order
     ],
     queryFn: () =>
       fetchHistory(
@@ -72,6 +75,7 @@ export const useFetchHistory = (
         endDate,
         status,
         all,
+        order
       ),
   });
 };

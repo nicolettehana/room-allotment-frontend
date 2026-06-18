@@ -72,6 +72,7 @@ const ASADBookingHistoryPage = () => {
     endDate,
     status,
     0,
+    "DESC"
   );
 
   //Disclosures
