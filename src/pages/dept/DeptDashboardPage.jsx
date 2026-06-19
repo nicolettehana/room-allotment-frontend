@@ -101,7 +101,7 @@ const DashboardPage = () => {
     searchValue,
     0,
     50,
-    dayjs().subtract(1, "days").startOf("day").format("YYYY-MM-DD"),
+    dayjs().startOf("day").format("YYYY-MM-DD"),
     endDate,
     2,
     0,

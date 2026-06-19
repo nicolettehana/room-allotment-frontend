@@ -42,6 +42,10 @@ import { CgProfile } from "react-icons/cg";
 import dayjs from "dayjs";
 import { TiCancel } from "react-icons/ti";
 import { FaEdit } from "react-icons/fa";
+import { GrFormView } from "react-icons/gr";
+import { useGetRemark } from "../../../hooks/hallBookingQueries";
+import ViewRemarkModal from "../myBookings/ViewRemarkModal";
+import CancelModal from "../myBookings/CancelModal";
 
 function formatDateTime(dateTimeStr) {
   const date = new Date(dateTimeStr);
@@ -88,13 +92,46 @@ const AllBookingsTableWrapper = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedVisitorCode, setSelectedVisitorCode] = useState(null);
   const [selectedVPassNo, setSelectedVPassNo] = useState(null);
+  const [remark, setRemark] = useState(null);
 
   // Hooks
   const toast = useToast();
   const navigate = useNavigate();
 
+  //Disclosure
+  const viewRemarkDisclosure = useDisclosure();
+  const cancelDisclosure = useDisclosure();
+
   // Queries
   const queryClient = useQueryClient();
+
+  const getRemark = useGetRemark(
+    (response) => {
+      //console.log("SUCCESS", response);
+      setRemark(response?.data?.remark);
+      //onClose();
+      viewRemarkDisclosure.onOpen();
+      //onSuccess();
+      return response;
+    },
+    (error) => {
+      console.log("ERROR", error);
+      toast({
+        isClosable: true,
+        duration: 3000,
+        position: "top-right",
+        status: "error",
+        title: "Error",
+        description: error?.response?.data?.detail || "Error",
+      });
+      return error;
+    },
+  );
+
+  //Handlers
+  const getRemarkHandler = (row) => {
+    getRemark.mutate(row);
+  };
 
   if (query.isError) {
     return (
@@ -179,27 +216,16 @@ const AllBookingsTableWrapper = ({
 
   return (
     <Stack spacing={4}>
-      {selectedVisitorCode && (
-        <VisitorPassModal
-          visitorCode={selectedVisitorCode}
-          vPassNo={selectedVPassNo}
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            setSelectedVisitorCode(null);
-          }}
-        />
-      )}
-      {selectedVisitorId && (
-        <VisitorPhotoModal
-          visitorCode={selectedVisitorId}
-          isOpen={isOpen}
-          onClose={() => {
-            onClose();
-            setSelectedVisitorId(null); // reset for next use
-          }}
-        />
-      )}
+      <ViewRemarkModal
+        isOpen={viewRemarkDisclosure.isOpen}
+        onClose={viewRemarkDisclosure.onClose}
+        data={remark}
+      />
+      <CancelModal
+        isOpen={cancelDisclosure.isOpen}
+        onClose={cancelDisclosure.onClose}
+        data={rowState}
+      />
       {/* Table */}
       <TableContainer>
         <Table>
@@ -214,7 +240,7 @@ const AllBookingsTableWrapper = ({
               <Th>Requirements</Th>
               <Th>No. of Attendees</Th>
               <Th>Status</Th>
-              {/* <Th>Action</Th> */}
+              <Th>Action</Th>
               <Th>Remarks</Th>
               <Th>Contact Person Details</Th>
             </Tr>
@@ -315,23 +341,78 @@ const AllBookingsTableWrapper = ({
                       {row?.status}
                     </Badge>
                   </Td>
-                  {/* <Td>
-                    <Button
-                      variant="brand"
-                      colorScheme="brand"
-                      minW="auto"
-                      //lineHeight="1"
-                      size="xs"
-                      rightIcon={<TiCancel />}
-                      // onClick={() => {
-                      //   setRowState(row);
-
-                      //   deleteDisclosure.onOpen();
-                      // }}
-                    >
-                      Cancel
-                    </Button>
-                  </Td> */}
+                  <Td>
+                    <VStack align="stretch">
+                      {row?.appStatus === 2 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/asad/my-bookings/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                      {row?.appStatus !== 4 && row?.appStatus !== 5 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<TiCancel />}
+                          onClick={() => {
+                            setRowState(row);
+                            cancelDisclosure.onOpen();
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                      )}
+                      {(row?.appStatus === 4 || row?.appStatus === 3) && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<GrFormView />}
+                          onClick={() => {
+                            setRowState(row);
+                            getRemarkHandler(row);
+                          }}
+                        >
+                          View Remark
+                        </Button>
+                      )}
+                      {row?.appStatus === 3 && (
+                        <Button
+                          variant="brand"
+                          colorScheme="brand"
+                          minW="auto"
+                          //lineHeight="1"
+                          size="xs"
+                          rightIcon={<FaEdit />}
+                          onClick={() => {
+                            setRowState(row);
+                            navigate("/dept/booking-history/update-booking", {
+                              state: { bookingQuery: row },
+                            });
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      )}
+                    </VStack>
+                  </Td>
                   <Td>
                     <Text fontSize="sm">{row?.remarks}</Text>
                   </Td>
